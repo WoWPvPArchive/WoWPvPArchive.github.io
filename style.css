@@ -23,6 +23,12 @@ body {
   overflow: hidden;
   background-size: cover;
   background-position: center;
+  /* Text isn't meant to be selected/highlighted anywhere on this
+     site -- it's a visual character-select screen, not a document. */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   /* Neutral placeholder backdrop -- shows until you add a real image
      for each class below. Not tied to any class color, so it won't be
      confused with the icon gradients. This still applies to body
@@ -45,85 +51,6 @@ body {
   z-index: 0;
   overflow: hidden;
   background-color: #181410;
-}
-
-/* ----- Volume control (top-left, persistent across both scenes) ----- */
-
-.audio-control {
-  position: fixed;
-  bottom: 3vh;
-  left: 3vw;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-}
-
-.audio-btn {
-  width: 38px;
-  height: 38px;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  border: none;
-  background: rgba(20, 16, 11, 0.65);
-  color: var(--parchment);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 150ms ease, color 150ms ease;
-}
-
-.audio-btn:hover {
-  background: rgba(156, 122, 60, 0.28);
-  color: var(--gold-bright);
-}
-
-.audio-panel {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 6px;
-  max-width: 0;
-  white-space: nowrap;
-  opacity: 0;
-  margin-left: 0;
-  padding: 0;
-  overflow: hidden;
-  background: rgba(20, 16, 11, 0.65);
-  border-radius: 16px;
-  transition: max-width 250ms ease, opacity 200ms ease, margin-left 250ms ease, padding 250ms ease;
-}
-
-.audio-control.open .audio-panel {
-  max-width: 260px;
-  opacity: 1;
-  margin-left: 10px;
-  padding: 4px 6px 4px 12px;
-}
-
-.volume-slider {
-  width: 120px;
-  flex: 0 0 auto;
-  box-sizing: content-box;
-  accent-color: var(--gold-bright);
-}
-
-.audio-pause-btn {
-  width: 24px;
-  height: 24px;
-  flex: 0 0 auto;
-  border: none;
-  background: none;
-  color: var(--parchment);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: color 150ms ease;
-}
-
-.audio-pause-btn:hover {
-  color: var(--gold-bright);
 }
 
 .bg-layer {
@@ -333,6 +260,17 @@ body.honorable-open .honorable-scene {
   top: 4vh;
   left: 50%;
   transform: translateX(-50%);
+  /* Without an explicit width, an absolutely-positioned width:auto
+     element with only "left" set (not "right") gets its shrink-to-fit
+     available width capped at (containing block width - left offset)
+     by spec -- at left:50% that's exactly half the viewport, however
+     wide its content actually wants to be, regardless of the
+     translateX(-50%) used to center it (transforms don't affect this
+     calculation). Below ~1252px wide that's less than the 9 class
+     icons need in one row, wrapping them into two rows that then
+     collide with .lore-panel below. max-content sizes this to its
+     content's actual preferred width instead. */
+  width: max-content;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -495,7 +433,7 @@ body.honorable-open .honorable-scene {
    (targeting [data-class="..."][data-mode="..."] .model-stage) if
    other specific combinations ever need their own nudge. */
 [data-class="priest"][data-mode="skill"] .model-stage {
-  bottom: 4.7vh;
+  bottom: 15vh;
 }
 
 .race-model {
@@ -568,8 +506,17 @@ body.honorable-open .honorable-scene {
   /* Fixed position rather than tied to the model box -- once the
      model got much bigger and bottom-anchored, aligning to its top
      edge pushed this panel up into the icon row. This value places
-     it comfortably below the icon row instead. */
-  top: 17vh;
+     it comfortably below the icon row instead.
+     A flat vh value only clears the icon row on tall viewports: the
+     row's own height (~124px: mode-toggle + gap + one 72px icon row)
+     barely changes with viewport height, but 17vh does, so on
+     anything shorter than ~940px tall (most 1024x768/1366x768/
+     1440x900 laptop screens) a flat vh value ends up smaller than
+     .control-column's actual rendered height and the two overlap.
+     Matching .control-column's own "top: 4vh" and adding a fixed
+     pixel allowance for its height instead keeps this tied to where
+     that row actually ends, regardless of viewport height. */
+  top: calc(4vh + 150px);
   right: 4vw;
   width: min(560px, 34vw);
   min-width: 320px;
@@ -663,7 +610,7 @@ body.honorable-open .honorable-scene {
   gap: 14px;
   font-family: "Jost", sans-serif;
   color: var(--gold-bright);
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 1);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
 }
 
 .rating-stars {
@@ -714,7 +661,12 @@ body.honorable-open .honorable-scene {
     position: static;
     bottom: auto;
     width: 85vw;
-    margin: 12px auto 0;
+    /* The desktop rule's min-width: 320px doesn't shrink with the
+       viewport -- left as-is, it forces this panel (and everything
+       inside it) wider than the screen on any phone narrower than
+       320px, which overflow-x: hidden above then just silently clips. */
+    min-width: 0;
+    margin: 0 auto;
     text-align: center;
   }
   .lore-rating {
@@ -725,11 +677,11 @@ body.honorable-open .honorable-scene {
     align-items: center;
     gap: 6px;
   }
-  .video-stage {
-    position: static;
-    width: min(400px, 85vw);
-    margin: 14px auto 0;
-  }
+  /* .video-stage's own mobile override lives in the later "Small
+     screens" media query instead of here: its base (desktop) rule
+     below is declared AFTER this block in the file, so with equal
+     specificity the base rule would win the cascade regardless of
+     viewport if this query tried to override it here too. */
 }
 
 /* ----- Embedded video (left side) -----------------------------------
@@ -832,50 +784,50 @@ body.honorable-open .honorable-scene {
 }
 
 /* ----- Honorable Mentions scene -------------------------------------
-   Bottom-anchored: a horizontal row of the same 9 class icons sits at
-   the bottom center, with the class-level note box and (optional)
-   video slot stacked directly above it (see .honorable-bottom-stack).
-   "Fun" and its name list sit to the left of the icon row, "Skill"
-   and its list mirrored on the right -- both horizontally centered,
-   via JS, in the gap between the icon row and their edge of the
-   screen (see positionSideLabels() in script.js), and both
-   bottom-anchored so the name list grows upward above its label as
-   entries are added. */
+   Mirrored left/right around a central vertical column of the same 9
+   class icons: "Fun" header + list on the left, "Skill" header + list
+   on the right. */
 
 .honorable-header {
-  position: fixed;
-  bottom: 2.6vh;
-  left: 0; /* overridden by positionSideLabels() in script.js */
+  position: absolute;
+  bottom: 9vh;
   margin: 0;
   font-family: "Jost", sans-serif;
   font-weight: 700;
-  font-size: clamp(2rem, 3vw, 2.75rem);
-  letter-spacing: 0.04em;
+  font-size: 1.15rem;
+  letter-spacing: 0.05em;
+  text-align: center;
   color: var(--gold-bright);
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
-  transform: translateX(-50%);
-  z-index: 4;
+  background: rgba(20, 16, 11, 0.55);
+  border: 1px solid var(--gold);
+  border-radius: 3px;
+  padding: 8px 20px;
 }
 
-.honorable-bottom-stack {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 2.6vh;
-  width: fit-content;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  z-index: 5;
+.honorable-header-fun {
+  left: 16vw;
+}
+
+.honorable-header-skill {
+  right: 16vw;
 }
 
 .honorable-icon-column {
+  position: absolute;
+  bottom: 15vh;
+  left: 50%;
+  transform: translateX(-50%);
+  /* See .control-column's own comment: width:auto here would get
+     shrink-to-fit-capped at half the viewport width (from left:50%
+     with no matching "right"), wrapping these 9 icons into two rows
+     well before the viewport is actually too narrow for one. */
+  width: max-content;
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
+  z-index: 2;
 }
 
 .honorable-class-btn {
@@ -883,8 +835,8 @@ body.honorable-open .honorable-scene {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 4px;
+  gap: 6px;
+  padding: 5px;
   cursor: pointer;
   opacity: 0.6;
   appearance: none;
@@ -895,18 +847,16 @@ body.honorable-open .honorable-scene {
   transition: opacity 150ms ease, transform 150ms ease;
 }
 
-/* Honorable Mentions' icons are a bit smaller than the main screen's
-   to fit nine of them comfortably in one row, scoped here so the
-   main screen's class-grid is unaffected even though both reuse the
-   same .class-icon/.class-label classes. */
+/* Honorable Mentions' icons/labels are ~25% bigger than the main
+   screen's, scoped here so the main screen's class-grid is unaffected
+   even though both reuse the same .class-icon/.class-label classes. */
 .honorable-icon-column .class-icon {
-  width: 42px;
-  height: 42px;
+  width: 50px;
+  height: 50px;
 }
 
 .honorable-icon-column .class-label {
-  font-size: 0.68rem;
-  text-align: center;
+  font-size: 1.06rem;
 }
 
 .honorable-class-btn:hover {
@@ -926,80 +876,94 @@ body.honorable-open .honorable-scene {
   color: var(--gold-bright);
 }
 
+.honorable-class-btn .class-label {
+  font-size: 0.85rem;
+  text-align: center;
+}
+
 .honorable-list {
-  position: fixed;
-  left: 0; /* overridden by positionSideLabels() in script.js */
-  bottom: calc(2.6vh + 74px); /* just above the Fun/Skill header */
-  max-width: min(360px, 26vw);
-  max-height: 62vh;
+  position: absolute;
+  /* Needs to clear .honorable-icon-column's own bottom edge, which is
+     its "bottom: 15vh" anchor plus its actual rendered height (~86px:
+     padding + 50px icon + gap + label, mostly fixed px, not vh). A
+     flat vh value here (18vh) only clears that on tall viewports --
+     at 768px tall, 18vh is 138px vs. the icon row's real ~201px
+     (115px anchor + 86px height), so the list renders behind the
+     icons instead of above them. Tying this to the icon column's own
+     terms instead keeps the gap correct at any viewport height. */
+  bottom: calc(15vh + 130px);
+  max-height: 55vh;
+  max-width: min(450px, 27vw);
   overflow-y: auto;
   overflow-x: hidden;
+  /* column-reverse (not column) so the first entry in the data sits
+     closest to the "Fun"/"Skill" badge below, with later entries
+     stacking upward above it -- the box's own height grows to fit
+     its content (up to max-height) since only "bottom" is anchored,
+     not "top", so it genuinely grows upward from that badge rather
+     than being a fixed-height box that happens to align near it. */
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: column-reverse;
+  align-items: flex-start;
   /* Each .honorable-entry-box gets an explicit width set by JS
      (see renderHonorableList in script.js) rather than relying on a
      shared grid column, so expanding one entry for its video can
      grow just that box without dragging every other box in the list
-     along with it. No top/height is set here beyond max-height, so
-     as entries are added the list's own top edge simply moves up --
-     it grows upward from the label rather than downward from a fixed
-     top. */
+     along with it. */
   gap: 10px;
-  padding: 2px 4px;
-  transform: translateX(-50%);
-  z-index: 3;
+  padding-right: 8px;
+}
+
+.honorable-list-fun {
+  left: 16vw;
+}
+
+.honorable-list-skill {
+  /* 8px less than the fun side's matching offset to cancel out this
+     list's own padding-right (kept for scrollbar clearance): that
+     padding pads the shrink-to-fit box on its far side from the
+     right-anchor, which pushes the actual entry boxes 8px further
+     left than a right-anchored ".honorable-header-skill" of the same
+     width would sit -- shifting the anchor back by that same 8px
+     lines the two up exactly. */
+  right: calc(16vw - 8px);
 }
 
 .honorable-placeholder {
   font-family: "Jost", sans-serif;
   font-style: italic;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   color: var(--gold);
   opacity: 0.8;
-  text-align: center;
 }
 
-/* The class-level note, for classes with a "note" set in
-   HONORABLE_MENTIONS (currently Rogue and Mage) -- a darker box
-   centered above the icon row, shown via JS toggling ".visible".
-   Hidden entirely for classes without a note, and since it's a
-   normal flex child of .honorable-bottom-stack, hiding it just lets
-   the stack shrink rather than leaving an empty gap. */
+/* Free-flowing lore text, shown for classes with a "note" set in
+   HONORABLE_MENTIONS. Sits centered, just above the icon row, with a
+   slight dark backdrop so it stays legible over any background.
+   Hidden entirely (via JS toggling ".visible") for classes without a
+   note. */
 .honorable-note {
   display: none;
+  position: absolute;
+  bottom: 24vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(700px, 60vw);
   margin: 0;
-  max-width: min(480px, 60vw);
-  padding: 14px 22px;
   text-align: center;
   font-family: "Jost", sans-serif;
   font-style: italic;
-  font-size: 1.28rem;
-  line-height: 1.55;
+  font-size: 1.3rem;
+  line-height: 1.6;
   color: var(--parchment);
-  background: rgba(10, 8, 6, 0.55);
-  border: 1px solid rgba(210, 212, 218, 0.25);
-  border-radius: 4px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.95);
+  background: rgba(8, 6, 4, 0.55);
+  border-radius: 6px;
+  padding: 16px 24px;
+  z-index: 2;
 }
 
 .honorable-note.visible {
   display: block;
-}
-
-/* Blinking cursor at the end of the text while it's "typing" (see
-   .typing-cursor toggled in script.js) and briefly after, mimicking a
-   typewriter. */
-.honorable-note.typing::after {
-  content: "|";
-  margin-left: 2px;
-  animation: honorable-cursor-blink 0.8s step-start infinite;
-}
-
-@keyframes honorable-cursor-blink {
-  50% {
-    opacity: 0;
-  }
 }
 
 .honorable-entry-box {
@@ -1014,7 +978,8 @@ body.honorable-open .honorable-scene {
   height: 50px;
   display: flex;
   align-items: center;
-  text-align: left;
+  justify-content: center;
+  text-align: center;
   font-family: "Jost", sans-serif;
   font-weight: 600;
   font-size: 1.19rem;
@@ -1029,29 +994,67 @@ body.honorable-open .honorable-scene {
   color: var(--gold-bright);
 }
 
-.honorable-entry.expanded .honorable-entry-name {
-  color: var(--gold-bright);
+/* Tint each entry name to the currently-picked class's official WoW
+   color (same palette as the main screen's body[data-class] .lore-name
+   rules), scoped to .honorable-scene rather than body so it only ever
+   reflects the class picked here, not whatever the main screen has
+   selected underneath. */
+.honorable-scene[data-class="warrior"] .honorable-entry-name {
+  color: #C69B6D;
 }
 
-/* Single shared video slot, centered in .honorable-bottom-stack above
-   the note box. Hidden (and empty -- see hideVideoOverlay in
-   script.js) until an entry with a video is clicked, so nothing
-   loads or autoplays before then. */
+.honorable-scene[data-class="paladin"] .honorable-entry-name {
+  color: #F48CBA;
+}
+
+.honorable-scene[data-class="hunter"] .honorable-entry-name {
+  color: #AAD372;
+}
+
+.honorable-scene[data-class="rogue"] .honorable-entry-name {
+  color: #FFF468;
+}
+
+.honorable-scene[data-class="priest"] .honorable-entry-name {
+  color: #FFFFFF;
+}
+
+.honorable-scene[data-class="shaman"] .honorable-entry-name {
+  color: #0070DD;
+}
+
+.honorable-scene[data-class="mage"] .honorable-entry-name {
+  color: #3FC7EB;
+}
+
+.honorable-scene[data-class="warlock"] .honorable-entry-name {
+  color: #8788EE;
+}
+
+.honorable-scene[data-class="druid"] .honorable-entry-name {
+  color: #FF7C0A;
+}
+
+/* Centered on screen, sized noticeably bigger than the main page's
+   player since it now has the whole middle of the scene to itself.
+   16:9 is still the sensible aspect ratio here since these are all
+   YouTube embeds either way. */
 .honorable-video-overlay {
   display: none;
-  width: min(560px, 80vw);
+  position: fixed;
+  top: 38vh;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(760px, 50vw);
+  aspect-ratio: 16 / 9;
+  z-index: 20;
 }
 
 .honorable-video-overlay.visible {
   display: block;
 }
 
-#honorableVideoFrame {
-  width: 100%;
-  height: 300px;
-}
-
-#honorableVideoFrame iframe {
+.honorable-video-overlay iframe {
   width: 100%;
   height: 100%;
   border: none;
@@ -1083,62 +1086,125 @@ body.honorable-open .honorable-scene {
 }
 
 @media (max-width: 860px) {
-  /* The desktop layout leans entirely on JS-computed horizontal
-     centering and bottom-anchoring, which doesn't suit a narrow
-     screen -- everything falls back to plain top-to-bottom document
-     flow instead: each header directly above its own list, then the
-     icon row/note/video stack, matching the order in index.html. */
   .honorable-header {
     position: static;
     text-align: center;
-    margin: 12px auto 4px;
+    margin: 8px auto;
+    display: inline-block;
+  }
+  .honorable-icon-column {
+    position: static;
     transform: none;
+    margin: 12px auto;
+    justify-content: center;
+    order: 1;
   }
   .honorable-list {
     position: static;
     width: 90vw;
+    /* The desktop rule's max-width: min(450px, 27vw) doesn't relax on
+       its own -- left in place, 27vw caps this well below the 90vw
+       just set above (e.g. ~86px on a 320px phone against ~205px-wide
+       entry boxes), and overflow-x: hidden then silently clips every
+       name down to its first character or two. */
     max-width: none;
     margin: 0 auto 12px;
     max-height: 22vh;
-    transform: none;
+    flex-direction: column;
   }
-  .honorable-bottom-stack {
-    position: static;
-    transform: none;
-    margin: 12px auto;
+  .honorable-list-fun {
+    order: 3;
   }
-  .honorable-icon-column {
-    flex-wrap: wrap;
-    justify-content: center;
+  .honorable-list-skill {
+    order: 5;
   }
   .honorable-note {
+    position: static;
+    transform: none;
     width: 90vw;
-    max-width: none;
-    margin: 0 auto;
+    margin: 0 auto 12px;
+    order: 6;
   }
   .honorable-video-overlay {
+    position: static;
+    transform: none;
     width: 90vw;
+    margin: 0 auto 12px;
+    order: 7;
+  }
+  /* Desktop pairs each header with its list purely via matching
+     absolute-position anchors, so they can sit anywhere in the
+     markup; both headers just happen to come first (see
+     character-select.html). Stacked in that same raw DOM order on
+     mobile, both headers would end up in one clump above both lists
+     instead of each one leading its own list -- ordering them here
+     interleaves header/list/header/list to match. */
+  .honorable-header-fun {
+    order: 2;
+  }
+  .honorable-header-skill {
+    order: 4;
   }
   .honorable-scene {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    padding: 12px 0 70px;
+    align-items: center;
+    /* Extra top clearance for the fixed Back button below -- without
+       it, the first stacked item (the class icons) starts right under
+       the scene's own padding and sits behind the button instead of
+       below it. Matched to the button's own fixed top (10px) + its
+       rendered height + a small gap, not the button's desktop "top:
+       4vh", since 4vh swings anywhere from ~20px to ~70px across
+       actual phone heights and a vh-based gap here would just as
+       easily under- or over-shoot it again. */
+    padding: 56px 0 70px;
   }
   .honorable-back-btn {
     position: fixed;
+    top: 10px;
   }
 }
 
 /* ----- Small screens ----- */
 
 @media (max-width: 860px) {
-  .control-column {
-    left: 50%;
-    top: 2vh;
-    transform: translateX(-50%);
-    align-items: center;
+  html, body {
+    height: auto;
+    min-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
+
+  /* Desktop overlaps everything via absolute positioning, which only
+     works when the viewport is tall/wide enough for it all to fit
+     without colliding. Below this width, every direct child of
+     .scene stacks in normal document order instead -- .control-column
+     and .model-stage need this same position:static treatment that
+     .lore-panel/.video-stage already get above, otherwise those two
+     stay absolutely positioned near the top of a now-scrollable page
+     and sit on top of the stacked content instead of leading it. */
+  .scene {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 3vh 0 24px;
+  }
+
+  .control-column,
+  .model-stage,
+  .identity-panel {
+    position: static;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    transform: none;
+  }
+
   .class-btn {
     width: 52px;
     height: 60px;
@@ -1149,14 +1215,33 @@ body.honorable-open .honorable-scene {
   }
   .model-stage {
     width: min(640px, 92vw);
-    height: min(640px, 68vh);
-    min-width: 300px;
-    min-height: 300px;
-    bottom: 0;
+    height: min(640px, 62vh);
+    min-width: 240px;
+    min-height: 240px;
   }
   .identity-panel {
-    bottom: 22vh;
     width: 85vw;
+  }
+
+  .video-stage {
+    position: static;
+    width: min(400px, 85vw);
+    margin: 0 auto;
+  }
+
+  /* Static, not fixed: this scene's total stacked height often lands
+     close to one viewport, so a fixed bottom bar and the last couple
+     of stacked items (.lore-panel's rating line especially) end up
+     sharing the same on-screen band with no scrolling involved to
+     separate them -- unlike .honorable-back-btn on the Honorable
+     Mentions scene, where the list being reliably much taller than
+     the viewport makes "always reachable while scrolling" worth that
+     same tradeoff. Static here just makes it the last stacked item. */
+  .honorable-btn {
+    position: static;
+    left: auto;
+    bottom: auto;
+    transform: none;
   }
 }
 
@@ -1197,27 +1282,4 @@ body[data-class="warlock"] .lore-name {
 
 body[data-class="druid"] .lore-name {
   color: #FF7C0A;
-}
-/* The custom cursor container */
-.custom-cursor-img {
-    position: fixed;
-    pointer-events: none;
-    width: 500px;         
-    height: auto;
-    z-index: 9999;
-    transform: translate(15px, calc(-100% - 15px));
-    
-    /* Hidden by default with absolutely NO transition (vanishes instantly) */
-    opacity: 0;
-    visibility: hidden;
-}
-
-/* When the warrior button is hovered: apply the transition and the delay */
-#honorableIconColumn:has(button[data-class="warrior"]:hover) + .custom-cursor-img {
-    opacity: 1;
-    visibility: visible;
-    
-    /* The transition only lives here, so it only affects the "fade-in" */
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    transition-delay: 6.7s; 
 }

@@ -3,277 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Character Select</title>
+<title>Choose Your Expansion</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<link rel="stylesheet" href="home.css">
 </head>
-<body data-class="warrior" data-mode="skill">
+<body>
 
-  <!-- Background music: fades in a few seconds after load (see
-       script.js). Volume button top-left toggles a slider. -->
-  <audio id="bgMusic" src="audio/wow-login-music.mp3" loop preload="auto"></audio>
+  <!-- Three equal columns by default. Hovering the whole group dims
+       and desaturates every column via CSS alone; hovering one
+       specific column then overrides it back to full color, widens
+       it (flex-grow), and gives it a gold border/brighter logo --
+       see home.css. Only the middle (Vanilla) column actually
+       navigates anywhere right now. -->
+  <div class="expansion-select">
 
-  <div class="audio-control" id="audioControl">
-    <button type="button" class="audio-btn" id="audioBtn" aria-label="Toggle volume control">
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 9v6h4l5 5V4L8 9H4z"/>
-        <path d="M16.5 8.5a5 5 0 0 1 0 7"/>
-        <path d="M19 6a8.5 8.5 0 0 1 0 12"/>
-      </svg>
+    <button type="button" class="expansion-column" data-expansion="bc" style="background-image: url('images/expansions/burning-crusade.jpg');">
+      <img class="expansion-logo" src="images/expansions/logo-bc.png" alt="The Burning Crusade">
     </button>
-    <div class="audio-panel">
-      <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0" aria-label="Volume">
-      <button type="button" class="audio-pause-btn" id="audioPauseBtn" aria-label="Pause music">
-        <svg class="icon-pause" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-          <rect x="6" y="5" width="4" height="14"/>
-          <rect x="14" y="5" width="4" height="14"/>
-        </svg>
-        <svg class="icon-play" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="display:none;">
-          <polygon points="7,4 20,12 7,20"/>
-        </svg>
-      </button>
-    </div>
-  </div>
 
-  <!-- Two stacked layers that crossfade between background images.
-       JS fades the incoming one in while fading the outgoing one out,
-       which is smoother than swapping background-image directly on
-       body (browsers can't animate between two different images). -->
-  <div class="bg-stage">
-    <div class="bg-layer" id="bgLayerA"></div>
-    <div class="bg-layer" id="bgLayerB"></div>
-  </div>
+    <button type="button" class="expansion-column" data-expansion="vanilla" style="background-image: url('images/expansions/vanilla.png');">
+      <img class="expansion-logo" src="images/expansions/logo-vanilla.png" alt="World of Warcraft">
+    </button>
 
-  <!-- Invisible element that mirrors body's data-class/data-mode so
-       the existing [data-class][data-mode] rules in style.css keep
-       working unchanged -- JS reads the resolved background-image off
-       this element rather than needing a second copy of those rules. -->
-  <div id="bgProbe" aria-hidden="true"></div>
-
-  <div class="scene">
-
-    <!-- Left control column: mode toggle + 3x3 class grid -->
-    <div class="control-column">
-
-      <div class="mode-toggle" role="group" aria-label="Choose a mode">
-        <button type="button" class="mode-btn active" data-mode="skill">Skill</button>
-        <button type="button" class="mode-btn" data-mode="fun">Fun</button>
-      </div>
-
-      <div class="class-grid" role="group" aria-label="Choose a class">
-        <button type="button" class="class-btn active" data-class="warrior">
-          <span class="class-icon">
-            <img src="icons/classicon_warrior.png" alt="Warrior">
-          </span>
-          <span class="class-label">Warrior</span>
-        </button>
-        <button type="button" class="class-btn" data-class="paladin">
-          <span class="class-icon">
-            <img src="icons/classicon_paladin.png" alt="Paladin">
-          </span>
-          <span class="class-label">Paladin</span>
-        </button>
-        <button type="button" class="class-btn" data-class="hunter">
-          <span class="class-icon">
-            <img src="icons/classicon_hunter.png" alt="Hunter">
-          </span>
-          <span class="class-label">Hunter</span>
-        </button>
-        <button type="button" class="class-btn" data-class="rogue">
-          <span class="class-icon">
-            <img src="icons/classicon_rogue.png" alt="Rogue">
-          </span>
-          <span class="class-label">Rogue</span>
-        </button>
-        <button type="button" class="class-btn" data-class="priest">
-          <span class="class-icon">
-            <img src="icons/classicon_priest.png" alt="Priest">
-          </span>
-          <span class="class-label">Priest</span>
-        </button>
-        <button type="button" class="class-btn" data-class="shaman">
-          <span class="class-icon">
-            <img src="icons/classicon_shaman.png" alt="Shaman">
-          </span>
-          <span class="class-label">Shaman</span>
-        </button>
-        <button type="button" class="class-btn" data-class="mage">
-          <span class="class-icon">
-            <img src="icons/classicon_mage.png" alt="Mage">
-          </span>
-          <span class="class-label">Mage</span>
-        </button>
-        <button type="button" class="class-btn" data-class="warlock">
-          <span class="class-icon">
-            <img src="icons/classicon_warlock.png" alt="Warlock">
-          </span>
-          <span class="class-label">Warlock</span>
-        </button>
-        <button type="button" class="class-btn" data-class="druid">
-          <span class="class-icon">
-            <img src="icons/classicon_druid.png" alt="Druid">
-          </span>
-          <span class="class-label">Druid</span>
-        </button>
-      </div>
-
-    </div>
-
-    <!-- 3D model, one element reused for whichever class/mode is active -->
-    <div class="model-stage">
-      <model-viewer
-        id="classModel"
-        class="race-model"
-        camera-controls
-        disable-zoom
-        shadow-intensity="0"
-        exposure="1"
-        autoplay
-        animation-name="Stand"
-        alt="3D model of the selected class"
-        interaction-prompt="none"
-        min-camera-orbit="auto 90deg 100%"
-        max-camera-orbit="auto 90deg 100%"
-        camera-orbit="90deg 75deg auto"
-        camera-target="0m 1m 0m"
-        disable-pan
-        scale="1.8 1.8 1.8"
-      ></model-viewer>
-      <div class="model-placeholder" id="modelPlaceholder">
-        <span class="placeholder-glyph">&#9670;</span>
-        <p>3D model placeholder<br><span id="placeholderPath"></span></p>
-      </div>
-    </div>
-
-    <!-- Right side: character name header + rating (same row) + lore text -->
-    <aside class="lore-panel" aria-label="Class description">
-      <div class="lore-name-row">
-        <h2 class="lore-name" id="loreName"></h2>
-        <p class="lore-rating" id="loreRating"></p>
-      </div>
-      <div id="loreText"></div>
-    </aside>
-
-    <!-- Left side: embedded video for the selected class/mode. Faded
-         out until hovered or playing (see .video-stage in style.css).
-         Uses the YouTube IFrame API (loaded in script.js) rather than
-         a plain <iframe> so play/pause state can be detected, and so
-         the video can be "cued" (thumbnail loaded, ready to play)
-         without autoplaying. -->
-    <div class="video-stage" id="videoStage">
-      <div id="videoFrame"></div>
-      <div class="video-missing" id="videoMissing">No video has been set for this class / mode yet.</div>
-    </div>
-
-    <!-- Bottom-center: shorter flavor text -->
-    <div class="identity-panel">
-      <p class="class-text" id="classText"></p>
-    </div>
-
-    <!-- Bottom-center: opens the Honorable Mentions scene -->
-    <button type="button" class="honorable-btn" id="honorableBtn">Honorable Mentions</button>
+    <button type="button" class="expansion-column" data-expansion="wrath" style="background-image: url('images/expansions/wrath.png');">
+      <img class="expansion-logo" src="images/expansions/logo-wrath.png" alt="Wrath of the Lich King">
+    </button>
 
   </div>
 
-  <!-- Honorable Mentions scene: slides up from below when honorableBtn
-       is clicked, while .scene above slides up and out (see
-       "body.honorable-open" rules in style.css). Mirrored layout: a
-       vertical column of the same 9 class icons down the center,
-       "Fun" entries on the left, "Skill" entries on the right. -->
-  <div class="honorable-scene" id="honorableScene">
-
-    <!-- "Fun" (left) and its name list -- both horizontally centered,
-         via JS, in the gap between the screen's left edge and the
-         icon row's left edge (see positionSideLabels in script.js).
-         The list sits directly above its label and grows upward as
-         more entries are added, since it's bottom-anchored with no
-         fixed height. -->
-    <h2 class="honorable-header honorable-header-fun" id="honorableHeaderFun">Fun</h2>
-    <div class="honorable-list honorable-list-fun" id="honorableListFun">
-      <p class="honorable-placeholder">Select a class to see its honorable mentions.</p>
-    </div>
-
-    <!-- "Skill" (right), mirrored the same way. -->
-    <h2 class="honorable-header honorable-header-skill" id="honorableHeaderSkill">Skill</h2>
-    <div class="honorable-list honorable-list-skill" id="honorableListSkill">
-      <p class="honorable-placeholder">Select a class to see its honorable mentions.</p>
-    </div>
-
-    <!-- Bottom-center stack: the class icon row anchored to the
-         bottom of the screen, with the class-level note box directly
-         above it, and the (optional) video slot above that -- normal
-         document flow inside a bottom-anchored flex column, so
-         showing/hiding the note or video just pushes the stack
-         taller rather than needing any position math. -->
-    <div class="honorable-bottom-stack" id="honorableBottomStack">
-
-      <!-- Single shared video slot -- only ever shows the entry that
-           was just clicked (see showVideoOverlay in script.js).
-           Empty/hidden until then, so nothing loads or autoplays
-           until an entry with a video is actually opened. -->
-      <div class="honorable-video-overlay" id="honorableVideoOverlay">
-        <div id="honorableVideoFrame"></div>
-      </div>
-
-      <!-- Shown only for classes that have a "note" set in
-           HONORABLE_MENTIONS (currently just Rogue and Mage). Hidden
-           entirely for classes without one. -->
-      <p class="honorable-note" id="honorableNote"></p>
-
-      <div class="honorable-icon-column" id="honorableIconColumn" role="group" aria-label="Choose a class">
-        <button type="button" class="honorable-class-btn" data-class="warrior">
-          <span class="class-icon"><img src="icons/classicon_warrior.png" alt="Warrior"></span>
-          <span class="class-label">Warrior</span>
-        </button>
-        <button type="button" class="honorable-class-btn" data-class="paladin">
-          <span class="class-icon"><img src="icons/classicon_paladin.png" alt="Paladin"></span>
-          <span class="class-label">Paladin</span>
-        </button>
-        <button type="button" class="honorable-class-btn" data-class="hunter">
-          <span class="class-icon"><img src="icons/classicon_hunter.png" alt="Hunter"></span>
-          <span class="class-label">Hunter</span>
-        </button>
-        <button type="button" class="honorable-class-btn" data-class="rogue">
-          <span class="class-icon"><img src="icons/classicon_rogue.png" alt="Rogue"></span>
-          <span class="class-label">Rogue</span>
-        </button>
-        <button type="button" class="honorable-class-btn" data-class="priest">
-          <span class="class-icon"><img src="icons/classicon_priest.png" alt="Priest"></span>
-          <span class="class-label">Priest</span>
-        </button>
-        <button type="button" class="honorable-class-btn" data-class="shaman">
-          <span class="class-icon"><img src="icons/classicon_shaman.png" alt="Shaman"></span>
-          <span class="class-label">Shaman</span>
-        </button>
-        <button type="button" class="honorable-class-btn" data-class="mage">
-          <span class="class-icon"><img src="icons/classicon_mage.png" alt="Mage"></span>
-          <span class="class-label">Mage</span>
-        </button>
-        <button type="button" class="honorable-class-btn" data-class="warlock">
-          <span class="class-icon"><img src="icons/classicon_warlock.png" alt="Warlock"></span>
-          <span class="class-label">Warlock</span>
-        </button>
-        <button type="button" class="honorable-class-btn" data-class="druid">
-          <span class="class-icon"><img src="icons/classicon_druid.png" alt="Druid"></span>
-          <span class="class-label">Druid</span>
-        </button>
-      </div>
-
-      <!-- Must stay the icon row's immediate next sibling -- the
-           warrior-hover cursor trick in style.css targets it with
-           "#honorableIconColumn + .custom-cursor-img", and being
-           position:fixed it's removed from normal flow anyway, so
-           it doesn't disturb the icon row's flex layout. -->
-      <img src="images/WARRIOR.png" alt="Cursor Follower" class="custom-cursor-img" id="customCursor">
-    </div>
-
-    <button type="button" class="honorable-back-btn" id="honorableBackBtn">Back</button>
-
-  </div>
-
-  <script src="script.js"></script>
+  <script src="home.js"></script>
 </body>
 </html>

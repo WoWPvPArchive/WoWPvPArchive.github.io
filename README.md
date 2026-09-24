@@ -1,3 +1,27 @@
+# Site Structure
+
+`index.html` is now the homepage: a 3-column expansion picker (The
+Burning Crusade / World of Warcraft / Wrath of the Lich King). Clicking
+the middle (Vanilla) column takes you to `character-select.html` —
+everything described below, which used to be `index.html`, still lives
+there unchanged. The other two columns are placeholders and don't go
+anywhere yet.
+
+**Homepage files:**
+- `index.html` — the 3-column picker's structure
+- `home.css` — its styling (hover/focus effects: dims and desaturates
+  the other two columns, widens and gold-borders whichever one you're
+  on)
+- `home.js` — wires up navigation; only Vanilla goes anywhere
+- `images/expansions/` — the three background images
+  (`burning-crusade.jpg`, `vanilla.png`, `wrath.png`) and the three
+  logo images (`logo-bc.png`, `logo-vanilla.png`, `logo-wrath.png`)
+
+To make Burning Crusade or Wrath actually lead somewhere later: give
+that column's `<button>` an `href`-equivalent by updating the click
+handler in `home.js` the same way Vanilla's works (`window.location.href
+= "..."`), once there's a page for it to go to.
+
 # Character Select Page
 
 A character-select-style landing page: pick a class from the row of 9
@@ -7,7 +31,8 @@ in a second, different set of the same for whichever class is
 currently selected.
 
 ## Files
-- `index.html` — structure
+- `character-select.html` — structure (this was `index.html` before
+  the homepage above was added)
 - `style.css` — styling, including one background theme per class/mode
   and the class icon row
 - `script.js` — `CLASS_DATA` (all the names, lore, videos, models, and
@@ -110,38 +135,40 @@ compressed (see below) matters more than it otherwise would.
 **Honorable Mentions:** the button at the bottom of the main screen
 slides the whole page up and out, replaced by a second scene sliding
 up from below (see `body.honorable-open` in `style.css` for the
-transition). That scene has the same 9 class icons in a vertical
-column down the center — click one to populate a list of names on
-each side ("Fun" on the left, "Skill" on the right), all sharing one
-uniform box width across both lists together (sized to whichever name,
-on either side, is longest). This data lives separately from the main
-`CLASS_DATA`, in `HONORABLE_MENTIONS` further down in `script.js`:
-each class has a `skill` and `fun` array, and you can add or remove
-entries freely — each is just `{ name: "...", lore: "...", video: "..." }`
-(use `video: null` if there's no video for that entry yet).
+transition). That scene has the same 9 class icons in a horizontal row
+near the bottom, centered — click one to populate a list of names on
+each side ("Fun" on the left, "Skill" on the right; those two badges
+themselves sit at the bottom corners, just above the volume button).
+Each list grows *upward* from its badge (first entry closest to the
+badge, later ones stacking above it) rather than being anchored at the
+top — that's `flex-direction: column-reverse` plus anchoring the list
+by `bottom` instead of `top` in `style.css`, so the box's height (and
+therefore how far up it reaches) grows with however many entries a
+class has. Both lists share one uniform box width together (sized to
+whichever name, on either side, is longest). This data lives
+separately from the main `CLASS_DATA`, in `HONORABLE_MENTIONS` further
+down in `script.js`: each class has a `skill` and `fun` array, and you
+can add or remove entries freely — each is just
+`{ name: "...", lore: "...", video: "..." }` (use `video: null` if
+there's no video for that entry yet).
 
-Clicking a name only ever controls the video: if that entry has one,
-it appears in a single shared, unstyled floating slot (no border or
-background of its own) positioned next to whichever entry was clicked
-— to the right for a Fun entry, to the left for a Skill entry, both
-opening toward the center. It's a top-level element rather than
-nested inside either list, so it can never be clipped by a list's
-scroll area, and it never affects any entry's position or width.
+Clicking a name controls both the video slot and the lore box. A
+video, if that entry has one, appears in a single shared, unstyled
+slot centered on screen (no border or background of its own, sized
+bigger than the main screen's player since it now has the middle of
+the scene to itself) — a top-level element rather than nested inside
+either list, so it can never be clipped by a list's scroll area, and
+it never affects any entry's position or width. Lore, if that entry
+has any, appears in a separate box centered just above the icon row
+(with a slight dark backdrop for legibility), typed out
+letter-by-letter. Selecting a different entry, collapsing the current
+one, or switching classes all clear whichever of these was showing —
+neither one is "sticky" across entries. This `lore` field is
+per-character now; there's no more class-level ambient note (the
+`note` field still exists on some classes in the data but isn't read
+or displayed by anything).
 
-`lore` on an individual entry currently does nothing on its own —
-lore only ever shows via a class's own `note` field (a sibling of
-`skill` and `fun`, not inside them): free-flowing text shown next to
-the lists the moment you click a class icon, typed out
-letter-by-letter, and vertically aligned with that class's own icon in
-the column. Only Rogue and Mage have one set right now; any class
-without a `note` just shows nothing there. If you want a class's
-honorable-mention lore to actually appear, write (or move) it into
-that class's `note` field.
-
-The "Back" button at the top returns to the main scene, and the icon
-column's left edge is kept aligned with the Back button's left edge
-(computed in JS, since the button's width depends on its own
-text/padding).
+The "Back" button stays at the top and returns to the main scene.
 
 The Honorable Mentions scene has its own background, separate from the
 main screen's per-class ones — search `style.css` for `.honorable-scene`
@@ -162,39 +189,13 @@ individual font-size/dimension bumps throughout its section of
 `style.css` rather than a single CSS transform, to avoid any risk of
 content clipping at the screen edges.
 
-**Background music:** `audio/wow-login-music.mp3` plays on a loop,
-starting silent and fading in to about a quarter volume over a few
-seconds. Browsers generally block audio-with-sound from autoplaying
-until the visitor has interacted with the page somehow (clicked,
-typed, tapped) — the code tries to start playback right away, and if
-that's blocked, waits for the first click/keypress/tap anywhere on the
-page and starts then instead, so it should always start eventually
-either way, just not always instantly. The volume button, bottom-left
-and visible on both scenes, expands a horizontal slider and a
-pause/play button when clicked, and collapses again automatically 3
-seconds after the last interaction with either control. Once a
-visitor touches the slider, the auto fade-in stops adjusting the
-volume for them so their choice sticks. The music also automatically
-pauses itself while the main video player is actually playing, and
-resumes 1.5 seconds after the video stops — that short delay is
-deliberate: skipping/seeking through a video fires brief
-buffering/paused states between seeks, and without the delay the music
-would blip back in during every one of those instead of only when
-playback genuinely stops. Unless the visitor paused the music
-manually, in which case it stays paused either way. (This only applies
-to the main video player, which has real play/state detection via the
-YouTube API; the plain-iframe videos inside Honorable Mentions entries
-don't pause the music, since there's no equivalent way to detect their
-play state.) To use a different track, replace the file at that path
-(or update the `<audio>` element's `src` in `index.html` if you rename
-it).
-
 ## Deploying to GitHub Pages
 
 1. Create a new GitHub repository (or use an existing one).
-2. Add `index.html`, `style.css`, `script.js`, and the `models/`,
-   `icons/`, `images/`, and `fonts/` folders to the repo root — or into
-   a `/docs` folder if you prefer.
+2. Add `index.html`, `home.css`, `home.js`, `character-select.html`,
+   `style.css`, `script.js`, and the `models/`, `icons/`, `images/`
+   (including its `expansions/` subfolder), and `fonts/` folders to
+   the repo root — or into a `/docs` folder if you prefer.
 3. Commit and push.
 4. In the repo, go to **Settings → Pages**.
 5. Under "Build and deployment", set **Source** to "Deploy from a

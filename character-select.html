@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Character Select</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+</head>
+<body data-class="warrior" data-mode="skill">
+
+  <!-- Two stacked layers that crossfade between background images.
+       JS fades the incoming one in while fading the outgoing one out,
+       which is smoother than swapping background-image directly on
+       body (browsers can't animate between two different images). -->
+  <div class="bg-stage">
+    <div class="bg-layer" id="bgLayerA"></div>
+    <div class="bg-layer" id="bgLayerB"></div>
+  </div>
+
+  <!-- Invisible element that mirrors body's data-class/data-mode so
+       the existing [data-class][data-mode] rules in style.css keep
+       working unchanged -- JS reads the resolved background-image off
+       this element rather than needing a second copy of those rules. -->
+  <div id="bgProbe" aria-hidden="true"></div>
+
+  <div class="scene">
+
+    <!-- Left control column: mode toggle + 3x3 class grid -->
+    <div class="control-column">
+
+      <div class="mode-toggle" role="group" aria-label="Choose a mode">
+        <button type="button" class="mode-btn active" data-mode="skill">Skill</button>
+        <button type="button" class="mode-btn" data-mode="fun">Fun</button>
+      </div>
+
+      <div class="class-grid" role="group" aria-label="Choose a class">
+        <button type="button" class="class-btn active" data-class="warrior">
+          <span class="class-icon">
+            <img src="icons/classicon_warrior.png" alt="Warrior">
+          </span>
+          <span class="class-label">Warrior</span>
+        </button>
+        <button type="button" class="class-btn" data-class="paladin">
+          <span class="class-icon">
+            <img src="icons/classicon_paladin.png" alt="Paladin">
+          </span>
+          <span class="class-label">Paladin</span>
+        </button>
+        <button type="button" class="class-btn" data-class="hunter">
+          <span class="class-icon">
+            <img src="icons/classicon_hunter.png" alt="Hunter">
+          </span>
+          <span class="class-label">Hunter</span>
+        </button>
+        <button type="button" class="class-btn" data-class="rogue">
+          <span class="class-icon">
+            <img src="icons/classicon_rogue.png" alt="Rogue">
+          </span>
+          <span class="class-label">Rogue</span>
+        </button>
+        <button type="button" class="class-btn" data-class="priest">
+          <span class="class-icon">
+            <img src="icons/classicon_priest.png" alt="Priest">
+          </span>
+          <span class="class-label">Priest</span>
+        </button>
+        <button type="button" class="class-btn" data-class="shaman">
+          <span class="class-icon">
+            <img src="icons/classicon_shaman.png" alt="Shaman">
+          </span>
+          <span class="class-label">Shaman</span>
+        </button>
+        <button type="button" class="class-btn" data-class="mage">
+          <span class="class-icon">
+            <img src="icons/classicon_mage.png" alt="Mage">
+          </span>
+          <span class="class-label">Mage</span>
+        </button>
+        <button type="button" class="class-btn" data-class="warlock">
+          <span class="class-icon">
+            <img src="icons/classicon_warlock.png" alt="Warlock">
+          </span>
+          <span class="class-label">Warlock</span>
+        </button>
+        <button type="button" class="class-btn" data-class="druid">
+          <span class="class-icon">
+            <img src="icons/classicon_druid.png" alt="Druid">
+          </span>
+          <span class="class-label">Druid</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- 3D model, one element reused for whichever class/mode is active -->
+    <div class="model-stage">
+      <model-viewer
+        id="classModel"
+        class="race-model"
+        camera-controls
+        disable-zoom
+        shadow-intensity="0"
+        exposure="1"
+        autoplay
+        animation-name="Stand"
+        alt="3D model of the selected class"
+        interaction-prompt="none"
+        min-camera-orbit="auto 90deg 100%"
+        max-camera-orbit="auto 90deg 100%"
+        camera-orbit="90deg 75deg auto"
+        camera-target="0m 1m 0m"
+        disable-pan
+        scale="1.8 1.8 1.8"
+      ></model-viewer>
+      <div class="model-placeholder" id="modelPlaceholder">
+        <span class="placeholder-glyph">&#9670;</span>
+        <p>3D model placeholder<br><span id="placeholderPath"></span></p>
+      </div>
+    </div>
+
+    <!-- Right side: character name header + rating (same row) + lore text -->
+    <aside class="lore-panel" aria-label="Class description">
+      <div class="lore-name-row">
+        <h2 class="lore-name" id="loreName"></h2>
+        <p class="lore-rating" id="loreRating"></p>
+      </div>
+      <div id="loreText"></div>
+    </aside>
+
+    <!-- Left side: embedded video for the selected class/mode. Faded
+         out until hovered or playing (see .video-stage in style.css).
+         Uses the YouTube IFrame API (loaded in script.js) rather than
+         a plain <iframe> so play/pause state can be detected, and so
+         the video can be "cued" (thumbnail loaded, ready to play)
+         without autoplaying. -->
+    <div class="video-stage" id="videoStage">
+      <div id="videoFrame"></div>
+      <div class="video-missing" id="videoMissing">No video has been set for this class / mode yet.</div>
+    </div>
+
+    <!-- Bottom-center: shorter flavor text -->
+    <div class="identity-panel">
+      <p class="class-text" id="classText"></p>
+    </div>
+
+    <!-- Bottom-center: opens the Honorable Mentions scene -->
+    <button type="button" class="honorable-btn" id="honorableBtn">Honorable Mentions</button>
+
+  </div>
+
+  <!-- Honorable Mentions scene: slides up from below when honorableBtn
+       is clicked, while .scene above slides up and out (see
+       "body.honorable-open" rules in style.css). Mirrored layout: a
+       vertical column of the same 9 class icons down the center,
+       "Fun" entries on the left, "Skill" entries on the right. -->
+  <div class="honorable-scene" id="honorableScene">
+
+    <h2 class="honorable-header honorable-header-fun">Fun</h2>
+    <h2 class="honorable-header honorable-header-skill">Skill</h2>
+
+    <div class="honorable-icon-column" id="honorableIconColumn" role="group" aria-label="Choose a class">
+      <button type="button" class="honorable-class-btn" data-class="warrior">
+        <span class="class-icon"><img src="icons/classicon_warrior.png" alt="Warrior"></span>
+        <span class="class-label">Warrior</span>
+      </button>
+      <button type="button" class="honorable-class-btn" data-class="paladin">
+        <span class="class-icon"><img src="icons/classicon_paladin.png" alt="Paladin"></span>
+        <span class="class-label">Paladin</span>
+      </button>
+      <button type="button" class="honorable-class-btn" data-class="hunter">
+        <span class="class-icon"><img src="icons/classicon_hunter.png" alt="Hunter"></span>
+        <span class="class-label">Hunter</span>
+      </button>
+      <button type="button" class="honorable-class-btn" data-class="rogue">
+        <span class="class-icon"><img src="icons/classicon_rogue.png" alt="Rogue"></span>
+        <span class="class-label">Rogue</span>
+      </button>
+      <button type="button" class="honorable-class-btn" data-class="priest">
+        <span class="class-icon"><img src="icons/classicon_priest.png" alt="Priest"></span>
+        <span class="class-label">Priest</span>
+      </button>
+      <button type="button" class="honorable-class-btn" data-class="shaman">
+        <span class="class-icon"><img src="icons/classicon_shaman.png" alt="Shaman"></span>
+        <span class="class-label">Shaman</span>
+      </button>
+      <button type="button" class="honorable-class-btn" data-class="mage">
+        <span class="class-icon"><img src="icons/classicon_mage.png" alt="Mage"></span>
+        <span class="class-label">Mage</span>
+      </button>
+      <button type="button" class="honorable-class-btn" data-class="warlock">
+        <span class="class-icon"><img src="icons/classicon_warlock.png" alt="Warlock"></span>
+        <span class="class-label">Warlock</span>
+      </button>
+      <button type="button" class="honorable-class-btn" data-class="druid">
+        <span class="class-icon"><img src="icons/classicon_druid.png" alt="Druid"></span>
+        <span class="class-label">Druid</span>
+      </button>
+    </div>
+
+    <div class="honorable-list honorable-list-fun" id="honorableListFun"></div>
+    <div class="honorable-list honorable-list-skill" id="honorableListSkill"></div>
+
+    <!-- Free-flowing text shown next to the lists, only for classes
+         that have a "note" set in HONORABLE_MENTIONS (currently just
+         Rogue and Mage). Hidden entirely for classes without one. -->
+    <p class="honorable-note" id="honorableNote"></p>
+
+    <button type="button" class="honorable-back-btn" id="honorableBackBtn">Back</button>
+
+    <!-- Single shared, unstyled video slot -- JS positions it next to
+         whichever entry was just clicked (see showVideoOverlay in
+         script.js) rather than nesting a video inside each entry,
+         which avoids clipping/overflow issues entirely since this
+         isn't nested inside the scrollable lists at all. -->
+    <div class="honorable-video-overlay" id="honorableVideoOverlay">
+      <div id="honorableVideoFrame"></div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

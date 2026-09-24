@@ -17,18 +17,13 @@
   const honorableBtn = document.getElementById("honorableBtn");
   const honorableBackBtn = document.getElementById("honorableBackBtn");
   const honorableClassButtons = document.querySelectorAll(".honorable-class-btn");
+  const honorableScene = document.getElementById("honorableScene");
   const honorableListFun = document.getElementById("honorableListFun");
   const honorableListSkill = document.getElementById("honorableListSkill");
-  const honorableHeaderFun = document.getElementById("honorableHeaderFun");
-  const honorableHeaderSkill = document.getElementById("honorableHeaderSkill");
+  const honorableHeaderFun = document.querySelector(".honorable-header-fun");
+  const honorableHeaderSkill = document.querySelector(".honorable-header-skill");
   const honorableNote = document.getElementById("honorableNote");
   const honorableVideoOverlay = document.getElementById("honorableVideoOverlay");
-  const honorableVideoFrame = document.getElementById("honorableVideoFrame");
-  const bgMusic = document.getElementById("bgMusic");
-  const audioControl = document.getElementById("audioControl");
-  const audioBtn = document.getElementById("audioBtn");
-  const volumeSlider = document.getElementById("volumeSlider");
-  const audioPauseBtn = document.getElementById("audioPauseBtn");
 
   // ---------------------------------------------------------------
   // PLACEHOLDER DATA -- some of this is still meant to be filled in.
@@ -41,29 +36,25 @@
   // placeholder box until you add one, no code changes needed.
   // ---------------------------------------------------------------
   const CLASS_DATA = {
-    druid: {
-      skill: { name: "Tfo", text: "", model: "models/druid-skill.glb", lore: "Very solid player, he has an exceptional grasp on how to use the utility and strengths of this versatile class. 7.5/10", video: "aX93zH6wJeM", animation: "Stand" },
-      fun:   { name: "N E V E R ", text: "", model: "models/druid-fun.glb", lore: "You thought druids were weak in vanilla? Ferahgo and Boro came together to show you otherwise.", video: "J7DN_w0LQUI", animation: "Stand" }
-    },
-    hunter: {
-      skill: { name: "Junglle", text: "", model: "models/hunter-skill.glb", lore: "Some decent kiting here, especially given that he's clicking the majority of his spells. In comparison to every hunter PvP video (sorry Dysphoria) we've come across might as well be a god. 5/10", video: "QrXL4bxtymk", animation: "Stand" },
-      fun:   { name: "Dysphoria", text: "", model: "models/hunter-fun.glb", lore: " A completely fresh soundtrack for the time and a mental that says nothing is impossible Hunter Vs. World is an all time classic series.", video: "7XgF_P9Ddjk", animation: "Stand" }
-    },
-    mage: {
-      skill: { name: "Clazzi", text: "", model: "models/mage-skill.glb", lore: "Crispy movement, cooldown management and a complete confidence in his actions. Perhaps the first known recording of a dirty pop, the opening 1vX is one of the best recorded vanilla fights of all time. 9.5/10", video: "3_Tr5aklJ6U", animation: "Stand (ID 0 variation 0)" },
-      fun:   { name: "Pathologist", text: "", model: "models/mage-fun.glb", lore: "By far the most unique and creative visual style, Pathologist (Dyf1.6) saw the potential for PvP videos to be more than crit showcases and unedited BG footage, he wanted to make art, not just in video form as half of his soundtracks are his own songs. Had God blessed him with the PvP skill of a Clazzi, he'd be the only name on this list. ", video: "0ZNAWoYEras", animation: "Stand (ID 0 variation 0)", cameraRadius: "75%" }
+    warrior: {
+      skill: { name: "Bobo", text: "", model: "models/warrior-skill.glb", lore: "The rest of the skilled section were picked for their individual skill, Bobo however was picked because the demons he chose to fight could have made it to this list on their own (one of them did). By far the cleanest and most impressive warrior at the time, you could easily believe some of these duels were recorded yesterday and not 20 years ago. 9/10", video: "23MOz4cc0Uk", animation: "Stand", cameraRadius: "85%"  },
+      fun:   { name: "S&Q Inc Group PVP", text: "", model: "models/warrior-fun.glb", lore: "One of the classiest PvP videos in all of vanilla, the editing, the soundtrack and the 2vX lens they filmed through, S&Q Inc is nothing if not fun. A shoutout to Wheeliecool & Champ for a similar vibe but for us it's gotta be S&Q Inc.", video: "sHJS1bqu6yw", animation: "Stand" }
     },
     paladin: {
       skill: { name: "Arthus", text: "", model: "models/paladin-skill.glb", lore: " Is friends with bobo 6/10", video: "S9XitQA-dkE", animation: "Stand" },
       fun:   { name: "Zalgradis", text: "", model: "models/paladin-fun.glb", lore: "Sketches, engineering, bad voice acting, and a unique playstyle come together in a love letter full of references to other videos of the era", video: "NOXrGmulbMk", animation: "Stand" }
     },
-    priest: {
-      skill: { name: "There are no good priests apparently", text: "", model: "models/priest-skill.glb", lore: "There are no good priests apparently", video: "X9737mnPejQ", animation: "Stand" },
-      fun:   { name: "Beckon", text: "", model: "models/priest-fun.glb", lore: "is the Hulksmash of holy priests, sit back, relax, and watch this man cast a 40 second holy fire to take someones head off", video: "x_EgBtUtWBM", animation: "Stand (ID 0 variation 0)" }
-    },  
+    hunter: {
+      skill: { name: "Junglle", text: "", model: "models/hunter-skill.glb", lore: "Some decent kiting here, especially given that he's clicking the majority of his spells. In comparison to every hunter PvP video (sorry Dysphoria) we've come across might as well be a god. 5/10", video: "QrXL4bxtymk", animation: "Stand" },
+      fun:   { name: "Dysphoria", text: "", model: "models/hunter-fun.glb", lore: " A completely fresh soundtrack for the time and a mental that says nothing is impossible Hunter Vs. World is an all time classic series.", video: "7XgF_P9Ddjk", animation: "Stand" }
+    },
     rogue: {
       skill: { name: "Cielz", text: "", model: "models/rogue-skill.glb", lore: "The intro promises a lot, the subsequent 19 minutes delivers on some. Early attempts at 5-8ing warriors, a healthy trigger discipline on their cooldowns and a willingness to take on 1vX's. On top of it all he's a swirly ball enjoyer. Definitely check out the rogue honourable mentions as this was an incredibly close competition. 7.5/10", video:"qN9GtoGnTxc", animation: "Stand" },
       fun:   { name: "Mute (World of Roguecraft)", text: "", model: "models/rogue-fun.glb", lore: "The most influential vanilla PvP videos of all time, if you ever saw someone trying to flex on their enemies while naked, it's probably because of mute. (Released in reverse order, episode 3 was the first in the series)", video: "bqx1CFomKMI", animation: "Stand (ID 0 variation 0)" }
+    },
+    priest: {
+      skill: { name: "There are no good priests apparently", text: "", model: "models/priest-skill.glb", lore: "There are no good priests apparently", video: "X9737mnPejQ", animation: "Stand" },
+      fun:   { name: "Beckon", text: "", model: "models/priest-fun.glb", lore: "is the Hulksmash of holy priests, sit back, relax, and watch this man cast a 40 second holy fire to take someones head off", video: "x_EgBtUtWBM", animation: "Stand (ID 0 variation 0)" }
     },
     shaman: {
       skill: { name: "Nimhabulove", text: "", model: "models/shaman-skill.glb", lore: "Between totems, shocks, healing and damaging spells shaman has a lot of tools at its disposal, our guy said nah, not enough, and added some engi to this toolkit. Grounding coils, reflecting fears and stunlocking with tidal/nades, there are definite moments in his video that earn him a spot on this page. 6/10", video: "qxMSzBxxesk", animation: "Stand" },
@@ -74,15 +65,18 @@
         ]
       }
     },
+    mage: {
+      skill: { name: "Clazzi", text: "", model: "models/mage-skill.glb", lore: "Crispy movement, cooldown management and a complete confidence in his actions. Perhaps the first known recording of a dirty pop, the opening 1vX is one of the best recorded vanilla fights of all time. 9.5/10", video: "3_Tr5aklJ6U", animation: "Stand (ID 0 variation 0)" },
+      fun:   { name: "Pathologist", text: "", model: "models/mage-fun.glb", lore: "By far the most unique and creative visual style, Pathologist (Dyf1.6) saw the potential for PvP videos to be more than crit showcases and unedited BG footage, he wanted to make art, not just in video form as half of his soundtracks are his own songs. Had God blessed him with the PvP skill of a Clazzi, he'd be the only name on this list. ", video: "0ZNAWoYEras", animation: "Stand (ID 0 variation 0)", cameraRadius: "75%"  }
+    },
     warlock: {
-      skill: { name: "Lokilo", text: "", model: "models/warlock-skill.glb", lore: "An actual time traveler, completely cool under pressure with impeccable character control and target selection. What he lacks in flashiness he makes up for in pure cleanliness. 9/10", video: "dPJf4Ocjc-8", animation: "Stand (ID 0 variation 0)", cameraRadius: "70%" },
+      skill: { name: "Lokilo", text: "", model: "models/warlock-skill.glb", lore: "An actual time traveler, completely cool under pressure with impeccable character control and target selection. What he lacks in flashiness he makes up for in pure cleanliness. 9/10", video: "dPJf4Ocjc-8", animation: "Stand (ID 0 variation 0)", cameraRadius: "70%"  },
       fun:   { name: "Drakedog", text: "", model: "models/warlock-fun.glb", lore: "Did we mention we're fans of Pathologist? Drakedog, who is probably the most beloved vanilla warlock, having Pathologist edit his video for him was a crossover that came out of nowhere and we're glad it did.", video: "I918N8wUvRs", animation: "Stand (ID 0 variation 0)", cameraRadius: "40%" }
     },
-    warrior: {
-      skill: { name: "Bobo", text: "", model: "models/warrior-skill.glb", lore: "The rest of the skilled section were picked for their individual skill, Bobo however was picked because the demons he chose to fight could have made it to this list on their own (one of them did). By far the cleanest and most impressive warrior at the time, you could easily believe some of these duels were recorded yesterday and not 20 years ago. 9/10", video: "23MOz4cc0Uk", animation: "Stand", cameraRadius: "85%" },
-      fun:   { name: "S&Q Inc Group PVP", text: "", model: "models/warrior-fun.glb", lore: "One of the classiest PvP videos in all of vanilla, the editing, the soundtrack and the 2vX lens they filmed through, S&Q Inc is nothing if not fun. A shoutout to Wheeliecool & Champ for a similar vibe but for us it's gotta be S&Q Inc.", video: "sHJS1bqu6yw", animation: "Stand" }
+    druid: {
+      skill: { name: "Tfo", text: "", model: "models/druid-skill.glb", lore: "Very solid player, he has an exceptional grasp on how to use the utility and strengths of this versatile class. 7.5/10", video: "aX93zH6wJeM", animation: "Stand" },
+      fun:   { name: "N E V E R ", text: "", model: "models/druid-fun.glb", lore: "You thought druids were weak in vanilla? Ferahgo and Boro came together to show you otherwise.", video: "J7DN_w0LQUI", animation: "Stand" }
     }
-    
   };
 
   // ---------------------------------------------------------------
@@ -97,44 +91,44 @@
   const HONORABLE_MENTIONS = {
     warrior: {
       skill: [{ name: "Laintime", lore: "People think of Laintime as the godfather of warriors, we remember him as the lone pillar holding up the tuber industry. The people of Felwood thank you, Laintime", video: "LFkSidbQu2o" }],
-      fun: [{ name: "Swifty", lore: "", video: "HUPexEfCG7g" }, { name: "Pat", lore: "", video: "RGBnjELkgok" }, { name: "Maydie", lore: "", video: "SwSR1SHYZRI" }, { name: "Illusion", lore: "", video: "STq43Pxqgc4" }, { name: "Spinister", lore: "", video: "hW8ButI6mns" }, { name: "Hulksmash", lore: "", video: "IAR1CsAXLCw" }, { name: "Xahlior", lore: "", video: "oKQNJL5IL2s" }],
-      note: "People think of Laintime as the godfather of warriors, we remember him as the lone pillar holding up the tuber industry. The people of Felwood thank you, Laintime"
+      fun: [{ name: "Swifty", lore: "From the game-breaking charge macro exploit, to practically inventing Skull of Impending Doom to the fun 1v1 best player of each class format, Incredible Warrior Tricks is one of the most engaging vanilla videos of all time", video: "HUPexEfCG7g" }, { name: "Pat", lore: "This video is what happens when you give warrriors an extra talent point, an army of healers, and a row a buffs that would make the most battle-hardened Naxxramas raider blush", video: "RGBnjELkgok" }, { name: "Maydie", lore: "You already know who this is, you've seen this, your brother has seen this, your neighbor's wife has seen this. It's Maydie bro. Lock in. You're disappointing me.", video: "SwSR1SHYZRI" }, { name: "Illusion", lore: "Hulksmash with worse music and a worse overall video, but he has two f***ing servo arms so that evens it out a bit.", video: "STq43Pxqgc4" }, { name: "Spinister", lore: "The less famous twin brother of laintime but not any less fun", video: "hW8ButI6mns" }, { name: "Hulksmash", lore: "Big damage, Big soundtrack, Big fury, your favorite warriors favorite PvP video.", video: "IAR1CsAXLCw" }, { name: "Xahlior", lore: "The most fun thing about this video is his gear, because damn, how is this man so geared?", video: "oKQNJL5IL2s" }],
+      note: ""
     },
     paladin: {
-      skill: [{ name: "Chipman", lore: "", video: "b2EfsrD_Mqk" }, { name: "Kirill", lore: "", video: "fhnEhZVzo3I" }],
+      skill: [{ name: "Chipman", lore: "The Maydie of ret paladin videos", video: "b2EfsrD_Mqk" }, { name: "Kirill", lore: "Stunlocks with engi", video: "fhnEhZVzo3I" }],
       fun: []
     },
     hunter: {
-      skill: [{ name: "Biuret", lore: "", video: "m-IzBxFa8yg" }, { name: "Kishra", lore: "", video: "eIW0i5tch1E" }],
-      fun: [{ name: "Fubarius(Huntology)", lore: "Can’t really put this one into words, it’s something that just needs to be experienced. Some (most) will hate it and others will love it, for us however, we definitely believe in immersing ourselves in the dream of the hunt.", video: "k5DdYPLoItU" }],
-      note: "Can’t really put this one into words, it’s something that just needs to be experienced. Some (most) will hate it and others will love it, for us however, we definitely believe in immersing ourselves in the dream of the hunt."
+      skill: [{ name: "Biuret", lore: "After watching every hunter video that exists on the internet that could find we were left with three candidates, the clicker won between them.", video: "m-IzBxFa8yg" }, { name: "Kishra", lore: "After watching every hunter video that exists on the internet that could find we were left with three candidates, the clicker won between them.", video: "eIW0i5tch1E" }],
+      fun: [{ name: "Fubarius(Huntology)", lore: "Can't really put this one into words, it's something that just needs to be experienced. Some (most) will hate it and others will love it, for us however, we definitely believe in immersing ourselves in the dream of the hunt.", video: "k5DdYPLoItU" }],
+      note: ""
     },
     rogue: {
-      skill: [{ name: "Dahis", lore: "", video: "VMCDsXwAEK8" }, { name: "Corrupt", lore: "", video: "CkRIrlmQRYQ" }, { name: "Ming", lore: "", video: "aDXXr3ad3is" }, { name: "Happyminti", lore: "", video: "YvQoYMq8_Ng" }, { name: "Oozo", lore: "", video: "1C7Uvt_0oYs" }],
-      fun: [{ name: "Caen", lore: "", video: "CGZiwuUPFMo" }, { name: "Perkulator ", lore: "", video: "ID192rw5Whw" }, { name: "Grim", lore: "", video: "oWNt_8xcOZw" }],
-      note: "Each rogue has moments where they shine brighter than the others, we just had to pick one"
+      skill: [{ name: "Dahis", lore: "Dahis is the Klay Thompson to Cielz' Curry - Splash Bros!", video: "VMCDsXwAEK8" }, { name: "Corrupt", lore: "C'thun tentacles hunter traps", video: "CkRIrlmQRYQ" }, { name: "Ming", lore: "Humble beginnings to what would become one of the biggest names in the arena scene", video: "aDXXr3ad3is" }, { name: "Happyminti", lore: " Prevanishing paranoia, good reflectors, spacing warrior shouts for stealth, overall very clean", video: "YvQoYMq8_Ng" }, { name: "Oozo", lore: "Some of the earliest display of rogue skills that are now the mark of a good rogue (even if some ((all)) of them happened on accident)", video: "1C7Uvt_0oYs" }],
+      fun: [{ name: "Caen", lore: "Basically a movie, 41 minutes of Thunderfury slicing through people to a soundtrack that could only have been born in the early 00's", video: "CGZiwuUPFMo" }, { name: "Perkulator ", lore: "Good vibes", video: "ID192rw5Whw" }, { name: "Grim", lore: "High intensity, fun moments, same server as Zalgradis and Maydie.", video: "oWNt_8xcOZw" }],
+      note: ""
     },
     priest: {
       skill: [],
-      fun: [{ name: "Keytal", lore: "", video: "zAJOrVks7Xc" }],
+      fun: [{ name: "Keytal", lore: "Ever want to see what 10 Spriests look like in a WSG? Here you go.", video: "zAJOrVks7Xc" }],
       note: "There are no honorable priests apparently"
     },
     shaman: {
       skill: [],
-      fun: [{ name: "Arashmano", lore: "", video: "8-w9Wl8v6ZA" }]
+      fun: [{ name: "Arashmano", lore: "If Unbreakable is Shaq Arashmano is Yao, same build different style", video: "8-w9Wl8v6ZA" }]
     },
     mage: {
-      skill: [{ name: "Drifting", lore: "", video: "VXh_kZZ-GQo" }, { name: "Zachary", lore: "", video: "ohTYLIi1ghY" }, { name: "Gameking", lore: "", video: "RfY8Egsd6C8" }, { name: "Alca", lore: "", video: "MMnmuU8mOsw" }, { name: "Vurtne", lore: "", video: "k5Wieh9MMmc" }],
-      fun: [{ name: "Zelta", lore: "", video: "WYSbkW__6MI" }, { name: "Faxmonkey", lore: "", video: "3O_pNDc73MM" }, { name: "Voidim", lore: "", video: "fSn46eGGW7s" }, { name: "Otherguy(Sorrow Hill)", lore: "", video: "2FwMRW1ra0E" }],
+      skill: [{ name: "Drifting", lore: "Both Drifting and Zachary are incredibly clean and could have made the top spot if it was not for the fact that Clazzi is Clazzi", video: "VXh_kZZ-GQo" }, { name: "Zachary", lore: "Both Zachary and Drifting are incredibly clean and could have made the top spot if it was not for the fact that Clazzi is Clazzi.", video: "ohTYLIi1ghY" }, { name: "Gameking", lore: "Very fast in both decision making and execution, crispy ice blocks.", video: "RfY8Egsd6C8" }, { name: "Alca", lore: "Great movement, a lot of heads up small plays, and he's ele so that's fun.", video: "MMnmuU8mOsw" }, { name: "Vurtne", lore: "When you think warlock, you think Drakedog. When you think mage, it's Vurtne", video: "k5Wieh9MMmc" }],
+      fun: [{ name: "Zelta", lore: "Fire. Fun. Ignite. Invis pyro. Fun. Crit. Boom. Ignite.", video: "WYSbkW__6MI" }, { name: "Faxmonkey", lore: "Made you envious of mages PvE ability, Dysphoria and him were cut from the same cloth", video: "3O_pNDc73MM" }, { name: "Voidim", lore: "The worlds first vanilla video that doesn't include Rammstein or P.O.D, this soundtrack is F R E S H", video: "fSn46eGGW7s" }, { name: "Otherguy", lore: "Everyone who played in vanilla knew his name, very well respected player from way back when.", video: "2FwMRW1ra0E" }],
       note: "Both Zachary and Drifiting get extra special mentions as standouts, Clazzi is just a cut above everyone else"
     },
     warlock: {
-      skill: [{ name: "Shining", lore: "Coiling intercepts and smart use of spellstones, Shining is a strong contender for top spot", video: "SqlJUxRd9WU" }, { name: "May", lore: "", video: "fwvpcN72K98" }, { name: "Diivil", lore: "", video: "BV5iAVmiqF8" }],
+      skill: [{ name: "Shining", lore: "Coiling intercepts and smart use of spellstones, Shining is a strong contender for top spot", video: "SqlJUxRd9WU" }, { name: "May", lore: "An interesting CoE/Shadowburn build played by a guy who knows what both banish and spellstone do, some very nice plays here", video: "fwvpcN72K98" }, { name: "Diivil", lore: "Who needs 3k soulfires when you can tank your enemies to death, the rare vanilla soullink warlock who figured: If i take less damage and my dots do guaranteed damage don't i just win?", video: "BV5iAVmiqF8" }],
       fun: [],
-      note: "Coiling intercepts and smart use of spellstones, Shining is a strong contender for top spot"
+      note: ""
     },
     druid: {
-      skill: [{ name: "Unstoppable", lore: "", video: "_QLmuHDy0Qs" }, { name: "Azgaz", lore: "", video: "xlXOnYi5tAU" }],
+      skill: [{ name: "Unstoppable", lore: "Even if he weren't as capable as he is, deserves a spot for the model/spell editing.", video: "_QLmuHDy0Qs" }, { name: "Azgaz", lore: "Druid enjoyers would kill us if we didn't include Azgaz on the list", video: "xlXOnYi5tAU" }],
       fun: []
     }
   };
@@ -464,51 +458,53 @@
           if (!videoStage || !window.YT) return;
           const isPlaying = event.data === YT.PlayerState.PLAYING;
           videoStage.classList.toggle("playing", isPlaying);
-          duckMusicForVideoState(isPlaying);
         }
       }
     });
   }
 
-  // Auto-pause the background music while ANY YouTube video plays
-  // (the main class-preview player or the Honorable Mentions overlay
-  // player), and resume it once that video stops -- but only if the
-  // music was actually playing (and not paused for some other reason,
-  // e.g. the visitor's own pause button) when the video started.
-  // Resuming waits a beat rather than firing immediately: skipping
-  // through a video fires brief BUFFERING/PAUSED states between
-  // seeks, and without a delay the music would blip back in during
-  // every one of those instead of only when playback actually stops.
-  function duckMusicForVideoState(isPlaying) {
-    if (!bgMusic) return;
-    if (isPlaying) {
-      if (resumeMusicTimer) {
-        clearTimeout(resumeMusicTimer);
-        resumeMusicTimer = null;
+  // ---------------------------------------------------------------
+  // A second, separate YouTube player for the Honorable Mentions
+  // video slot -- using the real API (rather than a plain iframe)
+  // here too, for consistency with the main video player.
+  // ---------------------------------------------------------------
+  let honorableYtPlayer = null;
+  let honorablePendingVideoId = null;
+
+  function initHonorableYouTubePlayer() {
+    if (!window.YT || !window.YT.Player || !document.getElementById("honorableVideoFrame")) return;
+
+    honorableYtPlayer = new YT.Player("honorableVideoFrame", {
+      host: "https://www.youtube-nocookie.com",
+      playerVars: {
+        rel: 0,
+        modestbranding: 1,
+        playsinline: 1
+      },
+      events: {
+        onReady: () => {
+          if (honorablePendingVideoId) {
+            honorableYtPlayer.cueVideoById(honorablePendingVideoId);
+            honorablePendingVideoId = null;
+          }
+        }
       }
-      if (!bgMusic.paused) {
-        bgMusic.pause();
-        pausedForVideo = true;
-      }
-    } else if (pausedForVideo) {
-      if (resumeMusicTimer) clearTimeout(resumeMusicTimer);
-      resumeMusicTimer = setTimeout(() => {
-        bgMusic.play().catch(() => {});
-        pausedForVideo = false;
-        resumeMusicTimer = null;
-      }, 3000);
-    }
+    });
   }
 
   function loadYouTubeApi() {
-    if (window.YT && window.YT.Player) {
+    function initBoth() {
       initYouTubePlayer();
+      initHonorableYouTubePlayer();
+    }
+    if (window.YT && window.YT.Player) {
+      initBoth();
       return;
     }
     const tag = document.createElement("script");
     tag.src = "https://www.youtube.com/iframe_api";
     document.head.appendChild(tag);
-    window.onYouTubeIframeAPIReady = initYouTubePlayer;
+    window.onYouTubeIframeAPIReady = initBoth;
   }
 
   if (modelViewer) {
@@ -674,69 +670,22 @@
     boxes.forEach((box) => {
       box.style.width = width + "px";
     });
+    // Fun/Skill headers share the boxes' exact width and left/right
+    // anchor (see .honorable-header-fun/-skill in style.css), so
+    // giving them this same width centers them under the name boxes
+    // rather than just aligning a shared edge.
+    [honorableHeaderFun, honorableHeaderSkill].forEach((header) => {
+      if (header) header.style.width = width + "px";
+    });
   }
 
-  let typewriterTimer = null;
-
-  function stopTypewriter() {
-    if (typewriterTimer) {
-      clearInterval(typewriterTimer);
-      typewriterTimer = null;
-    }
-  }
-
-  // Reveals text one character at a time, like it's being typed.
-  function typeWriterEffect(el, text) {
-    stopTypewriter();
-    el.textContent = "";
-    el.classList.add("typing");
-    let i = 0;
-    typewriterTimer = setInterval(() => {
-      el.textContent += text.charAt(i);
-      i++;
-      if (i >= text.length) {
-        stopTypewriter();
-        el.classList.remove("typing");
-      }
-    }, 23);
-  }
-
-  // The note is now a single "darker box" that sits centered above
-  // the (horizontal) icon row rather than next to each icon
-  // individually, so showing/hiding it is just a class toggle -- no
-  // per-icon position math needed any more.
-  function showClassNote(className) {
-    const data = HONORABLE_MENTIONS[className];
-    if (!honorableNote || !data) return;
-    stopTypewriter();
-    if (data.note) {
-      honorableNote.classList.add("visible");
-      typeWriterEffect(honorableNote, data.note);
-    } else {
-      honorableNote.textContent = "";
-      honorableNote.classList.remove("visible", "typing");
-    }
-  }
-
-  // The Fun/Skill headers and their name lists sit to either side of
-  // the (horizontally centered) icon row, each one centered in the
-  // leftover space between the icon row and its edge of the screen --
-  // e.g. the Fun header sits at the midpoint between the screen's
-  // left edge and the icon row's left edge. That midpoint depends on
-  // the icon row's actual rendered width, so it's computed in JS
-  // rather than hardcoded, the same way the old vertical layout
-  // aligned itself with the Back button's width.
-  function positionSideLabels() {
-    const iconColumn = document.getElementById("honorableIconColumn");
-    if (!iconColumn || !honorableHeaderFun || !honorableHeaderSkill) return;
-    const rect = iconColumn.getBoundingClientRect();
-    const funCenter = rect.left / 2;
-    const skillCenter = rect.right + (window.innerWidth - rect.right) / 2;
-
-    honorableHeaderFun.style.left = funCenter + "px";
-    honorableHeaderSkill.style.left = skillCenter + "px";
-    if (honorableListFun) honorableListFun.style.left = funCenter + "px";
-    if (honorableListSkill) honorableListSkill.style.left = skillCenter + "px";
+  // Positions the note to the right of the given class's icon.
+  // Hides the lore note box -- shared by "no entry selected yet",
+  // "switched to a different class", and "this entry has no lore".
+  function hideLoreNote() {
+    if (!honorableNote) return;
+    honorableNote.textContent = "";
+    honorableNote.classList.remove("visible");
   }
 
   function renderHonorableLists(className) {
@@ -745,64 +694,36 @@
     renderHonorableList(honorableListFun, data.fun);
     renderHonorableList(honorableListSkill, data.skill);
     applyUniformEntryBoxWidth();
-    showClassNote(className);
+    hideLoreNote(); // no character selected yet in the newly-picked class
   }
 
-  // The video slot now lives centered in the bottom stack, directly
-  // above the note box, rather than positioned next to whichever
-  // entry was clicked -- so showing it is just a class toggle, same
-  // as the note.
-  let honorableYtPlayer = null; // wraps the overlay video so its play state can be watched, same as the main player
-
-  function destroyHonorablePlayer() {
-    if (honorableYtPlayer && typeof honorableYtPlayer.destroy === "function") {
-      honorableYtPlayer.destroy();
-    }
-    honorableYtPlayer = null;
-  }
-
+  // The video slot is centered on screen via CSS now, so showing it
+  // is just cueing the video and toggling visibility -- no position
+  // to compute.
   function showVideoOverlay(videoId) {
-    if (!honorableVideoOverlay || !honorableVideoFrame) return;
-
-    destroyHonorablePlayer();
-
-    if (window.YT && window.YT.Player) {
-      // Wrapped in a real YT.Player (like the main preview video)
-      // rather than a plain <iframe> so onStateChange fires and the
-      // background music ducking logic can react to it.
-      honorableVideoFrame.innerHTML = `<div id="honorableVideoPlayer"></div>`;
-      honorableYtPlayer = new YT.Player("honorableVideoPlayer", {
-        host: "https://www.youtube-nocookie.com",
-        videoId: videoId,
-        playerVars: { rel: 0, modestbranding: 1, playsinline: 1 },
-        events: {
-          onStateChange: (event) => {
-            duckMusicForVideoState(event.data === YT.PlayerState.PLAYING);
-          }
-        }
-      });
+    if (!honorableVideoOverlay) return;
+    if (honorableYtPlayer && typeof honorableYtPlayer.cueVideoById === "function") {
+      honorableYtPlayer.cueVideoById(videoId);
     } else {
-      // API not ready yet -- fall back to a plain iframe. Music won't
-      // auto-duck in this rare case since there's no state to watch.
-      honorableVideoFrame.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?rel=0" title="Honorable mention video" frameborder="0" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+      honorablePendingVideoId = videoId;
     }
-
     honorableVideoOverlay.classList.add("visible");
   }
 
   function hideVideoOverlay() {
-    if (!honorableVideoOverlay || !honorableVideoFrame) return;
+    if (!honorableVideoOverlay) return;
     honorableVideoOverlay.classList.remove("visible");
-    destroyHonorablePlayer();
-    honorableVideoFrame.innerHTML = ""; // stops playback, not just visually hides it
-    duckMusicForVideoState(false); // in case it was mid-play when closed, let music resume
+    if (honorableYtPlayer && typeof honorableYtPlayer.stopVideo === "function") {
+      honorableYtPlayer.stopVideo();
+    }
+    honorablePendingVideoId = null;
   }
 
   // Expand/collapse entries via event delegation, since the list
   // contents are rebuilt from scratch every time a class is picked.
-  // Names only ever control the video slot now -- lore lives entirely
-  // in the class-level "note" (see showClassNote), shown the moment
-  // you click a class icon rather than requiring a name click too.
+  // Clicking a name controls both the video slot and the lore note
+  // box -- each entry's own "lore" field, not a class-level ambient
+  // note, drives what shows in that box now.
   [honorableListFun, honorableListSkill].forEach((list) => {
     if (!list) return;
     const sideKey = list === honorableListFun ? "fun" : "skill";
@@ -818,6 +739,7 @@
 
       if (alreadyOpen) {
         hideVideoOverlay();
+        hideLoreNote();
         return;
       }
 
@@ -831,6 +753,14 @@
       } else {
         hideVideoOverlay();
       }
+
+      const entryLore = entryData && entryData.lore && entryData.lore.trim();
+      if (entryLore) {
+        honorableNote.textContent = entryLore;
+        honorableNote.classList.add("visible");
+      } else {
+        hideLoreNote();
+      }
     });
   });
 
@@ -840,22 +770,19 @@
     btn.addEventListener("click", () => {
       honorableClassButtons.forEach((b) => b.classList.toggle("active", b === btn));
       currentHonorableClass = btn.dataset.class;
+      if (honorableScene) honorableScene.dataset.class = currentHonorableClass;
       hideVideoOverlay();
       renderHonorableLists(currentHonorableClass);
     });
   });
 
-  window.addEventListener("resize", positionSideLabels);
-
-  positionSideLabels();
-
   if (honorableBtn) {
     honorableBtn.addEventListener("click", () => {
       body.classList.add("honorable-open");
-      // The icon row's width can shift slightly the first time the
-      // scene becomes visible (e.g. late-loading font), so recompute
-      // once the slide-in has had a frame to settle.
-      requestAnimationFrame(positionSideLabels);
+      // Sizes the Fun/Skill headers up front, rather than leaving them
+      // at their tiny text-only default width until the first class
+      // click renders entries and triggers this same sizing.
+      applyUniformEntryBoxWidth();
     });
   }
 
@@ -863,166 +790,6 @@
     honorableBackBtn.addEventListener("click", () => {
       body.classList.remove("honorable-open");
       hideVideoOverlay();
-    });
-  }
-// Throttle mechanism for the wheel event
-let isScrolling = false;
-const siteBody = document.body;
-
-window.addEventListener('wheel', (e) => {
-  // 1. Ignore tiny accidental movements (trackpad drift)
-  if (Math.abs(e.deltaY) < 10) return; 
-
-  // 2. Prevent the scroll from firing continuously
-  if (isScrolling) return;
-  isScrolling = true;
-
-  if (e.deltaY > 0) {
-    // Scrolling Up
-    siteBody.classList.add("honorable-open");
-  } else if (e.deltaY < 0) {
-    // Scrolling Down
-    siteBody.classList.remove("honorable-open");
-    hideVideoOverlay();
-  }
-
-  // 3. Reset the scroll lock after 500ms (adjust based on your CSS transition speed)
-  setTimeout(() => {
-    isScrolling = false;
-  }, 500);
-}, { passive: true });
-  // ---------------------------------------------------------------
-  // Background music. Starts silent, then fades in over a few
-  // seconds once playback actually begins. Browsers generally block
-  // audio-with-sound from autoplaying until the visitor has
-  // interacted with the page in some way, so this tries to play
-  // immediately, and if that's blocked, waits for the first click,
-  // keypress, or touch anywhere on the page and tries again then --
-  // the fade-in timing is the same either way, just measured from
-  // whenever playback actually manages to start rather than from
-  // page load.
-  // ---------------------------------------------------------------
-  const cursorImg = document.getElementById('customCursor');
-
-    window.addEventListener('mousemove', (e) => {
-        cursorImg.style.left = e.clientX + 'px';
-        cursorImg.style.top = e.clientY + 'px';
-    });
-  const MUSIC_TARGET_VOLUME = 0.25;
-  const MUSIC_FADE_IN_DELAY_MS = 1500;
-  const MUSIC_FADE_IN_DURATION_MS = 4000;
-  let userAdjustedVolume = false;
-  let pausedForVideo = false;
-  let resumeMusicTimer = null;
-
-  function fadeInMusic() {
-    if (!bgMusic) return;
-    let start = null;
-    function step(timestamp) {
-      if (userAdjustedVolume) return; // visitor took the slider -- stop overriding it
-      if (start === null) start = timestamp;
-      const progress = Math.min((timestamp - start) / MUSIC_FADE_IN_DURATION_MS, 1);
-      bgMusic.volume = progress * MUSIC_TARGET_VOLUME;
-      if (volumeSlider) volumeSlider.value = bgMusic.volume;
-      if (progress < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-
-  function startMusic() {
-    if (!bgMusic) return;
-    const playPromise = bgMusic.play();
-    if (playPromise === undefined) {
-      setTimeout(fadeInMusic, MUSIC_FADE_IN_DELAY_MS);
-      return;
-    }
-    playPromise
-      .then(() => {
-        setTimeout(fadeInMusic, MUSIC_FADE_IN_DELAY_MS);
-      })
-      .catch(() => {
-        const resumeOnInteraction = () => {
-          document.removeEventListener("click", resumeOnInteraction);
-          document.removeEventListener("keydown", resumeOnInteraction);
-          document.removeEventListener("touchstart", resumeOnInteraction);
-          bgMusic
-            .play()
-            .then(() => setTimeout(fadeInMusic, MUSIC_FADE_IN_DELAY_MS))
-            .catch(() => {});
-        };
-        document.addEventListener("click", resumeOnInteraction);
-        document.addEventListener("keydown", resumeOnInteraction);
-        document.addEventListener("touchstart", resumeOnInteraction);
-      });
-  }
-
-  if (bgMusic) {
-    bgMusic.volume = 0;
-    startMusic();
-  }
-
-  // Collapses the slider automatically 3 seconds after it was opened
-  // or last interacted with, rather than staying open indefinitely.
-  let collapseTimer = null;
-
-  function scheduleCollapse() {
-    if (collapseTimer) clearTimeout(collapseTimer);
-    collapseTimer = setTimeout(() => {
-      if (audioControl) audioControl.classList.remove("open");
-      collapseTimer = null;
-    }, 3000);
-  }
-
-  if (audioBtn && audioControl) {
-    audioBtn.addEventListener("click", () => {
-      audioControl.classList.toggle("open");
-      if (audioControl.classList.contains("open")) {
-        scheduleCollapse();
-      } else if (collapseTimer) {
-        clearTimeout(collapseTimer);
-        collapseTimer = null;
-      }
-    });
-  }
-
-  if (volumeSlider && bgMusic) {
-    volumeSlider.addEventListener("input", () => {
-      userAdjustedVolume = true;
-      bgMusic.volume = parseFloat(volumeSlider.value);
-      scheduleCollapse();
-    });
-  }
-
-  // Keeps the pause/play icon in sync with the audio element's real
-  // state regardless of what caused the change (the button itself,
-  // or music auto-pausing because a video started playing).
-  if (bgMusic && audioPauseBtn) {
-    const iconPause = audioPauseBtn.querySelector(".icon-pause");
-    const iconPlay = audioPauseBtn.querySelector(".icon-play");
-
-    function syncPauseIcon() {
-      const isPaused = bgMusic.paused;
-      if (iconPause) iconPause.style.display = isPaused ? "none" : "";
-      if (iconPlay) iconPlay.style.display = isPaused ? "" : "none";
-      audioPauseBtn.setAttribute("aria-label", isPaused ? "Play music" : "Pause music");
-    }
-
-    bgMusic.addEventListener("play", syncPauseIcon);
-    bgMusic.addEventListener("pause", syncPauseIcon);
-    syncPauseIcon();
-
-    audioPauseBtn.addEventListener("click", () => {
-      if (bgMusic.paused) {
-        bgMusic.play().catch(() => {});
-      } else {
-        bgMusic.pause();
-        pausedForVideo = false; // manual pause -- don't auto-resume this later
-        if (resumeMusicTimer) {
-          clearTimeout(resumeMusicTimer);
-          resumeMusicTimer = null;
-        }
-      }
-      scheduleCollapse();
     });
   }
 
