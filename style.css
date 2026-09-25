@@ -116,98 +116,98 @@ body {
    Without these, both variants share whatever [data-class="shaman"]
    [data-mode="fun"] rule below already provides. ---- */
 [data-class="warrior"][data-mode="skill"] {
-     background-image: url("images/Bobo.png");
+     background-image: url("images/Bobo.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="warrior"][data-mode="fun"] {
-     background-image: url("images/backgroundsnq.png");
+     background-image: url("images/backgroundsnq.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="paladin"][data-mode="skill"] {
-     background-image: url("images/Arthus.png");
+     background-image: url("images/Arthus.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="paladin"][data-mode="fun"] {
-     background-image: url("images/Zalgradis.png");
+     background-image: url("images/Zalgradis.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="hunter"][data-mode="skill"] {
-     background-image: url("images/Jungelle.png");
+     background-image: url("images/Jungelle.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="hunter"][data-mode="fun"] {
-     background-image: url("images/Dysphoria.png");
+     background-image: url("images/Dysphoria.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="rogue"][data-mode="skill"] {
-     background-image: url("images/Cielz.png");
+     background-image: url("images/Cielz1.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="rogue"][data-mode="fun"] {
-     background-image: url("images/Mute.png");
+     background-image: url("images/Mute.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="priest"][data-mode="skill"] {
-     background-image: url("images/backgroundpriest.png");
+     background-image: url("images/backgroundpriest.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="priest"][data-mode="fun"] {
-     background-image: url("images/beckon.png");
+     background-image: url("images/beckon.webp");
      background-size: cover;
      background-position: center;
    }
 
    [data-class="shaman"][data-mode="skill"] {
-     background-image: url("images/Nimhabulove.png");
+     background-image: url("images/Nimhabulove.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="shaman"][data-mode="fun"][data-variant="cabbarnuke"] {
-     background-image: url("images/Cabbarnackle.png");
+     background-image: url("images/Cabbarnackle1.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="shaman"][data-mode="fun"][data-variant="unbreakable"] {
-     background-image: url("images/Unbreakable.png");
+     background-image: url("images/Unbreakable.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="mage"][data-mode="skill"] {
-     background-image: url("images/Clazzi.png");
+     background-image: url("images/Clazzi1.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="mage"][data-mode="fun"] {
-     background-image: url("images/Path.png");
+     background-image: url("images/Path1.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="warlock"][data-mode="skill"] {
-     background-image: url("images/Lokilo.png");
+     background-image: url("images/Lokilo.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="warlock"][data-mode="fun"] {
-     background-image: url("images/Drakedog.png");
+     background-image: url("images/Drakedog.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="druid"][data-mode="skill"] {
-     background-image: url("images/tfo.png");
+     background-image: url("images/tfo.webp");
      background-size: cover;
      background-position: center;
    }
    [data-class="druid"][data-mode="fun"] {
-     background-image: url("images/NEVER.png");
+     background-image: url("images/NEVER.webp");
      background-size: cover;
      background-position: center;
    }
