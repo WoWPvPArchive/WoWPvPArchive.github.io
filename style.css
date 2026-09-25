@@ -783,6 +783,39 @@ body.honorable-open .honorable-scene {
   background: rgba(156, 122, 60, 0.28);
 }
 
+/* ----- "Expansion Select" button (bottom-right of main scene) -----
+   Same bottom-anchored pattern as .honorable-btn above, just parked
+   off to the right (left: 92%) instead of centered. See the mobile
+   override further down (next to .honorable-btn's own mobile rule)
+   for why this needs one: left: 92% is measured against .scene's
+   full width, which is still 100vw on mobile, but the on-screen
+   result overflows past the right edge there and gets silently
+   clipped by html/body's overflow-x: hidden -- which is what actually
+   made it look like it was sitting in the middle. */
+.home-btn {
+  position: absolute;
+  bottom: 2vh;
+  left: 92%;
+  transform: translateX(-50%);
+  z-index: 6;
+  font-family: "Jost", sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: var(--parchment);
+  background: rgba(20, 16, 11, 0.55);
+  border: 1px solid var(--gold);
+  border-radius: 3px;
+  padding: 8px 18px;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 150ms ease, background 150ms ease;
+}
+
+.home-btn:hover {
+  opacity: 1;
+  background: rgba(156, 122, 60, 0.28);
+}
+
 /* ----- Honorable Mentions scene -------------------------------------
    Mirrored left/right around a central vertical column of the same 9
    class icons: "Fun" header + list on the left, "Skill" header + list
@@ -1305,6 +1338,23 @@ body.honorable-open .honorable-scene {
     left: auto;
     bottom: auto;
     transform: none;
+  }
+
+  /* Same treatment as .honorable-btn just above: drop out of absolute
+     positioning entirely so it becomes a normal flex item in .scene's
+     mobile column layout instead. That's what actually fixes the
+     "stuck in the middle" look -- it's no longer measured against
+     left: 92% of a 100vw containing block at all. Placed here in the
+     source so it lands right after .honorable-btn in the cascade;
+     where it lands ON SCREEN also depends on where the button's own
+     <div> sits in the HTML relative to #honorableBtn -- put it
+     directly after that button's markup for it to stack underneath. */
+  .home-btn {
+    position: static;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    margin-top: 10px;
   }
 }
 
