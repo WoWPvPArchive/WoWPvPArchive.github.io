@@ -91,7 +91,7 @@
   const HONORABLE_MENTIONS = {
     warrior: {
       skill: [{ name: "Laintime", lore: "People think of Laintime as the godfather of warriors, we remember him as the lone pillar holding up the tuber industry. The people of Felwood thank you, Laintime", video: "LFkSidbQu2o" }],
-      fun: [{ name: "Swifty", lore: "1v1s, glowy hands, broken charge macros, basically inventing Skull of Impending Doom, by far one of the most captivating vanilla videos", video: "HUPexEfCG7g" }, { name: "Pat", lore: "This video is what happens when you give warrriors an extra talent point, an army of healers, and a row a buffs that would make the most battle-hardened Naxxramas raider blush", video: "RGBnjELkgok" }, { name: "Maydie", lore: "You already know who this is, you've seen this, your brother has seen this, your neighbor's wife has seen this. It's Maydie bro. Lock in. You're disappointing me.", video: "SwSR1SHYZRI" }, { name: "Illusion", lore: "Hulksmash with worse music and a worse overall video, but he has two f***ing servo arms so that evens it out a bit.", video: "STq43Pxqgc4" }, { name: "Spinister", lore: "The less famous twin brother of Laintime but not any less fun", video: "hW8ButI6mns" }, { name: "Hulksmash", lore: "Big damage, Big soundtrack, Big fury, your favorite warriors favorite PvP video.", video: "IAR1CsAXLCw" }, { name: "Xahlior", lore: "The most fun thing about this video is his gear, because damn, how is this man so geared?", video: "oKQNJL5IL2s" }],
+      fun: [{ name: "Swifty", lore: "This series explores the depths what is possible in game, exploits large and small showcased to you by the father of skull of impending doom.", video: "HUPexEfCG7g" }, { name: "Pat", lore: "This video is what happens when you give warrriors an extra talent point, an army of healers, and a row a buffs that would make the most battle-hardened Naxxramas raider blush", video: "RGBnjELkgok" }, { name: "Maydie", lore: "You already know who this is, you've seen this, your brother has seen this, your neighbor's wife has seen this. It's Maydie bro. Lock in. You're disappointing me.", video: "SwSR1SHYZRI" }, { name: "Illusion", lore: "Hulksmash with worse music and a worse overall video, but he has two f***ing servo arms so that evens it out a bit.", video: "STq43Pxqgc4" }, { name: "Spinister", lore: "The less famous twin brother of Laintime but not any less fun", video: "hW8ButI6mns" }, { name: "Hulksmash", lore: "Big damage, Big soundtrack, Big fury, your favorite warriors favorite PvP video.", video: "IAR1CsAXLCw" }, { name: "Xahlior", lore: "The most fun thing about this video is his gear, because damn, how is this man so geared?", video: "oKQNJL5IL2s" }],
       note: ""
     },
     paladin: {
@@ -115,7 +115,7 @@
     },
     shaman: {
       skill: [],
-      fun: [{ name: "Arashmano", lore: "If Unbreakable is Shaq Arashmano is Yao, same build different style", video: "8-w9Wl8v6ZA" }]
+      fun: [{ name: "Arashmano", lore: "If Unbreakable is Shaq, Arashmano is Yao, same build different style", video: "8-w9Wl8v6ZA" }]
     },
     mage: {
       skill: [{ name: "Drifting", lore: "Both Drifting and Zachary are incredibly clean and could have made the top spot if it was not for the fact that Clazzi is Clazzi", video: "VXh_kZZ-GQo" }, { name: "Zachary", lore: "Both Zachary and Drifting are incredibly clean and could have made the top spot if it was not for the fact that Clazzi is Clazzi.", video: "ohTYLIi1ghY" }, { name: "Gameking", lore: "Very fast in both decision making and execution, crispy ice blocks.", video: "RfY8Egsd6C8" }, { name: "Alca", lore: "Great movement, a lot of heads up small plays, and he's ele so that's fun.", video: "MMnmuU8mOsw" }, { name: "Vurtne", lore: "When you think warlock, you think Drakedog. When you think mage, it's Vurtne", video: "k5Wieh9MMmc" }],
@@ -845,4 +845,4 @@ button.addEventListener('mouseleave', () => {
 const homeBtn = document.getElementById('homeBtn');
 homeBtn.addEventListener('click', () => {
   window.location.href = "index.html"
-  });
+});

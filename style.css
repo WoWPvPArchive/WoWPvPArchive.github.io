@@ -1128,29 +1128,22 @@ body.honorable-open .honorable-scene {
      -- each grid-column assignment below is what keeps "Fun" and its
      list on the left, "Skill" and its list on the right. */
   .honorable-scene {
-    display: grid;
-    /* minmax(0, 1fr), not plain 1fr -- a bare 1fr track's automatic
-       minimum width is its content's own intrinsic size, which here
-       is the JS-set inline pixel width on .honorable-header/
-       .honorable-entry-box (sized to the single longest name across
-       every class -- see applyUniformEntryBoxWidth in script.js).
-       That let the column itself grow past half the screen no matter
-       what max-width the items were given. The 0 minimum lets the
-       track actually shrink to the available space so max-width:100%
-       further down has something real to clamp against. */
+     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     column-gap: 10px;
     row-gap: 8px;
     align-content: start;
-    overflow-y: auto;
-    /* Extra top clearance for the fixed Back button below -- without
-       it, the first stacked item (the icon row) starts right under
-       the scene's own padding and sits behind the button instead of
-       below it. Matched to the button's own fixed top (10px) + its
-       rendered height + a small gap, not the button's desktop "top:
-       4vh", since 4vh swings anywhere from ~20px to ~70px across
-       actual phone heights and a vh-based gap here would just as
-       easily under- or over-shoot it again. */
+    
+    /* 🌟 FIX 1: Prevent the container from shifting, stretching, or bouncing */
+    overflow-y: hidden; /* Stops the overall grid screen from scrolling vertically */
+    height: 100% !important;
+    position: fixed;
+    inset: 0;
+    
+    /* 🌟 FIX 2: Kill mobile pull-to-refresh & browser viewport elasticity */
+    overscroll-behavior: none !important; 
+    touch-action: none; /* Blocks generic page drag gestures */
+    
     padding: 56px 10px 70px;
   }
 
@@ -1158,12 +1151,11 @@ body.honorable-open .honorable-scene {
      so all 9 stay reachable without eating vertical space needed by
      the lists below. */
   .honorable-icon-column {
-    grid-column: 1 / -1;
+  grid-column: 1 / -1;
     grid-row: 1;
     position: static;
     transform: none;
     width: 100%;
-    max-width: none;
     margin: 0;
     flex-wrap: nowrap;
     justify-content: flex-start;
@@ -1171,6 +1163,8 @@ body.honorable-open .honorable-scene {
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 4px 4px 10px;
+    touch-action: pan-x; 
+    overscroll-behavior-x: contain;
   }
   .honorable-class-btn {
     flex: 0 0 auto;
@@ -1212,6 +1206,9 @@ body.honorable-open .honorable-scene {
     flex-direction: column;
     grid-row: 3;
     padding-right: 4px;
+    overflow-y: auto !important;
+    touch-action: pan-y !important; 
+    overscroll-behavior-y: contain !important;
   }
   .honorable-list-fun {
     grid-column: 1;
@@ -1271,6 +1268,10 @@ body.honorable-open .honorable-scene {
     min-height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+    .bg-stage {
+    bottom: auto; /* Break the inset: 0 constraint */
+    height: var(--mobile-bg-height, 100vh); /* Fallback to vh, but prefer locked JS variable */
+  }
   }
 
   /* While Honorable Mentions is open, the main .scene behind it is
