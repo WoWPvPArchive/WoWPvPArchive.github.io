@@ -1126,29 +1126,7 @@ body.honorable-open .honorable-scene {
      grid instead: icon row spans both columns up top, then the two
      headers share a row, then the two lists share a row below them
      -- each grid-column assignment below is what keeps "Fun" and its
-     list on the left, "Skill" and its list on the right.
-
-     Class bar, Fun/Skill labels, and each list's first entry all have
-     to stay on screen with nothing overlapping, while still letting
-     lore/video get pushed further down and reached by scrolling. That
-     rules out two things this used to do: letting the icon row and
-     headers scroll away with everything else (nothing was pinning
-     them), and nesting a second scrollable box (each .honorable-list
-     had its own overflow-y: auto) inside this already-scrolling one --
-     a scroll gesture that runs out of room in the inner box has
-     nowhere to go but the outer one, and that kind of scroll-chaining
-     between nested scrollports is exactly what tends to produce the
-     rubber-band/repaint glitches this was hitting on an Android Galaxy
-     A15 (the momentary flash of the main character-select scene
-     behind this one). So: icon row and headers below are made
-     position: sticky (pinned in place once you scroll past them,
-     rather than fixed the whole time, so they still sit in normal
-     flow at the top on first load) with solid backgrounds behind them
-     so scrolled-past list text can't show through and read as
-     "overlapping" the bar above it; the lists lose their own inner
-     scrollbox and just flow to full height as part of this one outer
-     scroll; and overscroll-behavior: contain stops this scrollport
-     from handing off leftover scroll to whatever's behind it. */
+     list on the left, "Skill" and its list on the right. */
   .honorable-scene {
     display: grid;
     /* minmax(0, 1fr), not plain 1fr -- a bare 1fr track's automatic
@@ -1161,59 +1139,47 @@ body.honorable-open .honorable-scene {
        track actually shrink to the available space so max-width:100%
        further down has something real to clamp against. */
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-auto-rows: min-content;
     column-gap: 10px;
     row-gap: 8px;
     align-content: start;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-    padding: 0 10px 70px;
+    /* Extra top clearance for the fixed Back button below -- without
+       it, the first stacked item (the icon row) starts right under
+       the scene's own padding and sits behind the button instead of
+       below it. Matched to the button's own fixed top (10px) + its
+       rendered height + a small gap, not the button's desktop "top:
+       4vh", since 4vh swings anywhere from ~20px to ~70px across
+       actual phone heights and a vh-based gap here would just as
+       easily under- or over-shoot it again. */
+    padding: 56px 10px 70px;
   }
 
-  /* Class icons: one row, scrollable sideways instead of wrapping, so
-     all 9 stay reachable without eating vertical space needed by the
-     lists below. Sticky + its own top padding (rather than padding on
-     .honorable-scene) so the same box that pins in place also carries
-     the clearance the fixed Back button needs above it. */
+  /* Class icons: one row, scrollable sideways instead of wrapping,
+     so all 9 stay reachable without eating vertical space needed by
+     the lists below. */
   .honorable-icon-column {
     grid-column: 1 / -1;
     grid-row: 1;
-    position: sticky;
-    top: 0;
-    z-index: 6;
-    background: rgba(15, 12, 9, 0.94);
+    position: static;
     transform: none;
     width: 100%;
     max-width: none;
-    margin: 0 -10px;
-    padding: 56px 14px 10px;
+    margin: 0;
     flex-wrap: nowrap;
     justify-content: flex-start;
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior-x: contain;
-    touch-action: pan-x;
+    padding: 4px 4px 10px;
   }
   .honorable-class-btn {
     flex: 0 0 auto;
   }
 
   .honorable-header {
-    /* Stacks directly under the icon row above once both are pinned
-       -- this top offset has to equal that row's own rendered height
-       (its 56px+10px padding plus the icon/label content between
-       them) or the two would either gap apart or overlap once stuck.
-       If you resize the icon row (bigger icons, more/less padding),
-       re-check this value against it. */
-    top: 108px;
-    position: sticky;
-    z-index: 5;
-    background: rgba(15, 12, 9, 0.94);
+    position: static;
     text-align: center;
     margin: 0;
-    padding: 8px 0;
     display: block;
     grid-row: 2;
     /* JS sets an inline px width on this (see applyUniformEntryBoxWidth
@@ -1241,17 +1207,7 @@ body.honorable-open .honorable-scene {
        clips every name down to its first character or two. */
     max-width: none;
     margin: 0;
-    /* No inner scrollbox on mobile (unlike the desktop rule this
-       overrides) -- see the comment on .honorable-scene above for
-       why a second, nested scrollport was the likely source of the
-       reported glitches. The list just grows to its full natural
-       height and scrolls as part of the one outer scrollport instead,
-       which also means its first entry is never separately clipped:
-       it's simply the next thing in flow right below the sticky
-       Fun/Skill row, so it's on screen the instant this scene opens. */
-    max-height: none;
-    overflow-y: visible;
-    overflow-x: visible;
+    max-height: 32vh;
     flex-direction: column;
     grid-row: 3;
     padding-right: 4px;
@@ -1303,7 +1259,6 @@ body.honorable-open .honorable-scene {
   .honorable-back-btn {
     position: fixed;
     top: 10px;
-    z-index: 8;
   }
 }
 
