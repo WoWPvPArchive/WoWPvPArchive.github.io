@@ -1207,7 +1207,8 @@ body.honorable-open .honorable-scene {
        clips every name down to its first character or two. */
     max-width: none;
     margin: 0;
-    max-height: 32vh;
+    max-height: 32vh; /* fallback for browsers without dvh support */
+    max-height: 32dvh; /* tracks the real visible area as the address bar shows/hides */
     flex-direction: column;
     grid-row: 3;
     padding-right: 4px;
@@ -1270,6 +1271,26 @@ body.honorable-open .honorable-scene {
     min-height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+  }
+
+  /* While Honorable Mentions is open, the main .scene behind it is
+     only moved off-screen via transform -- it's still in normal flow
+     underneath, still tall enough to need the body scroll above, so
+     without this the page has TWO independent scrollable regions at
+     once (this scrollable body, plus .honorable-scene's own internal
+     overflow-y: auto grid). On phones with a dynamic/auto-hiding
+     address bar (tested: Galaxy A15 Chrome), that double-scroll setup
+     plus the mid-gesture viewport resize from the bar collapsing is
+     what causes the grid rows to visibly squish together and the
+     .scene background behind to briefly peek through at the bottom
+     edge -- the fixed overlay doesn't always repaint cleanly through
+     that resize. Locking the body here means there's only ever one
+     scroll container while the overlay is up, which avoids the
+     conflict entirely. */
+  body.honorable-open,
+  body.honorable-open html {
+    overflow: hidden;
+    height: 100%;
   }
 
   /* Desktop overlaps everything via absolute positioning, which only
