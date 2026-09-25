@@ -1086,80 +1086,143 @@ body.honorable-open .honorable-scene {
 }
 
 @media (max-width: 860px) {
-  .honorable-header {
-    position: static;
-    text-align: center;
-    margin: 8px auto;
-    display: inline-block;
-  }
-  .honorable-icon-column {
-    position: static;
-    transform: none;
-    margin: 12px auto;
-    justify-content: center;
-    order: 1;
-  }
-  .honorable-list {
-    position: static;
-    width: 90vw;
-    /* The desktop rule's max-width: min(450px, 27vw) doesn't relax on
-       its own -- left in place, 27vw caps this well below the 90vw
-       just set above (e.g. ~86px on a 320px phone against ~205px-wide
-       entry boxes), and overflow-x: hidden then silently clips every
-       name down to its first character or two. */
-    max-width: none;
-    margin: 0 auto 12px;
-    max-height: 22vh;
-    flex-direction: column;
-  }
-  .honorable-list-fun {
-    order: 3;
-  }
-  .honorable-list-skill {
-    order: 5;
-  }
-  .honorable-note {
-    position: static;
-    transform: none;
-    width: 90vw;
-    margin: 0 auto 12px;
-    order: 6;
-  }
-  .honorable-video-overlay {
-    position: static;
-    transform: none;
-    width: 90vw;
-    margin: 0 auto 12px;
-    order: 7;
-  }
-  /* Desktop pairs each header with its list purely via matching
-     absolute-position anchors, so they can sit anywhere in the
-     markup; both headers just happen to come first (see
-     character-select.html). Stacked in that same raw DOM order on
-     mobile, both headers would end up in one clump above both lists
-     instead of each one leading its own list -- ordering them here
-     interleaves header/list/header/list to match. */
-  .honorable-header-fun {
-    order: 2;
-  }
-  .honorable-header-skill {
-    order: 4;
-  }
+  /* Desktop overlaps everything via absolute anchors (headers/lists
+     paired up purely by matching left/right offsets). Below this
+     width there's no room for two side-by-side absolute columns plus
+     the centered icon row, so the whole scene becomes a 2-column CSS
+     grid instead: icon row spans both columns up top, then the two
+     headers share a row, then the two lists share a row below them
+     -- each grid-column assignment below is what keeps "Fun" and its
+     list on the left, "Skill" and its list on the right. */
   .honorable-scene {
+    display: grid;
+    /* minmax(0, 1fr), not plain 1fr -- a bare 1fr track's automatic
+       minimum width is its content's own intrinsic size, which here
+       is the JS-set inline pixel width on .honorable-header/
+       .honorable-entry-box (sized to the single longest name across
+       every class -- see applyUniformEntryBoxWidth in script.js).
+       That let the column itself grow past half the screen no matter
+       what max-width the items were given. The 0 minimum lets the
+       track actually shrink to the available space so max-width:100%
+       further down has something real to clamp against. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 10px;
+    row-gap: 8px;
+    align-content: start;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     /* Extra top clearance for the fixed Back button below -- without
-       it, the first stacked item (the class icons) starts right under
+       it, the first stacked item (the icon row) starts right under
        the scene's own padding and sits behind the button instead of
        below it. Matched to the button's own fixed top (10px) + its
        rendered height + a small gap, not the button's desktop "top:
        4vh", since 4vh swings anywhere from ~20px to ~70px across
        actual phone heights and a vh-based gap here would just as
        easily under- or over-shoot it again. */
-    padding: 56px 0 70px;
+    padding: 56px 10px 70px;
   }
+
+  /* Class icons: one row, scrollable sideways instead of wrapping,
+     so all 9 stay reachable without eating vertical space needed by
+     the lists below. */
+  .honorable-icon-column {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 4px 10px;
+  }
+  .honorable-class-btn {
+    flex: 0 0 auto;
+  }
+
+  .honorable-header {
+    position: static;
+    text-align: center;
+    margin: 0;
+    display: block;
+    grid-row: 2;
+    /* JS sets an inline px width on this (see applyUniformEntryBoxWidth
+       in script.js), sized to the longest name across every class --
+       often wider than a half-screen column. max-width always wins
+       over a plain "width", inline or not, so this clamps it back
+       down to whatever the grid column actually has to give. */
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .honorable-header-fun {
+    grid-column: 1;
+  }
+  .honorable-header-skill {
+    grid-column: 2;
+  }
+
+  .honorable-list {
+    position: static;
+    width: 100%;
+    /* The desktop rule's max-width: min(450px, 27vw) doesn't relax on
+       its own -- left in place, 27vw caps this well below the column
+       width just given above (e.g. ~86px on a 320px phone against
+       ~150px-wide entry boxes), and overflow-x: hidden then silently
+       clips every name down to its first character or two. */
+    max-width: none;
+    margin: 0;
+    max-height: 32vh;
+    flex-direction: column;
+    grid-row: 3;
+    padding-right: 4px;
+  }
+  .honorable-list-fun {
+    grid-column: 1;
+  }
+  .honorable-list-skill {
+    grid-column: 2;
+  }
+  /* Same JS-set inline width as the headers above -- clamp each entry
+     box to its column instead of letting long names run past the
+     edge of the screen. */
+  /* .honorable-entry-box's own max-width:100% is only relative to its
+     direct parent, .honorable-entry -- a flex item that, like the
+     grid tracks above, defaults to a min-width equal to its content's
+     intrinsic size and so was stretching past the list's real width
+     right along with the box inside it. Constrain it too. */
+  .honorable-entry {
+    max-width: 100%;
+  }
+  .honorable-entry-box {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .honorable-entry-name {
+    white-space: normal;
+    height: auto;
+    min-height: 44px;
+  }
+
+  .honorable-note {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin: 0;
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
+  .honorable-video-overlay {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin: 0;
+    grid-column: 1 / -1;
+    grid-row: 5;
+  }
+
   .honorable-back-btn {
     position: fixed;
     top: 10px;
