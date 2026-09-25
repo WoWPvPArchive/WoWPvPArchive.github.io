@@ -91,16 +91,16 @@
   const HONORABLE_MENTIONS = {
     warrior: {
       skill: [{ name: "Laintime", lore: "People think of Laintime as the godfather of warriors, we remember him as the lone pillar holding up the tuber industry. The people of Felwood thank you, Laintime", video: "LFkSidbQu2o" }],
-      fun: [{ name: "Swifty", lore: "Game-breaking charge macros, glowy hands, basically inventing Skull of Impending Doom, by far one of the most captivating vanilla videos", video: "HUPexEfCG7g" }, { name: "Pat", lore: "This video is what happens when you give warrriors an extra talent point, an army of healers, and a row a buffs that would make the most battle-hardened Naxxramas raider blush", video: "RGBnjELkgok" }, { name: "Maydie", lore: "You already know who this is, you've seen this, your brother has seen this, your neighbor's wife has seen this. It's Maydie bro. Lock in. You're disappointing me.", video: "SwSR1SHYZRI" }, { name: "Illusion", lore: "Hulksmash with worse music and a worse overall video, but he has two f***ing servo arms so that evens it out a bit.", video: "STq43Pxqgc4" }, { name: "Spinister", lore: "The less famous twin brother of Laintime but not any less fun", video: "hW8ButI6mns" }, { name: "Hulksmash", lore: "Big damage, Big soundtrack, Big fury, your favorite warriors favorite PvP video.", video: "IAR1CsAXLCw" }, { name: "Xahlior", lore: "The most fun thing about this video is his gear, because damn, how is this man so geared?", video: "oKQNJL5IL2s" }],
+      fun: [{ name: "Swifty", lore: "From the game-breaking charge macro exploit, to practically inventing Skull of Impending Doom to the fun 1v1 best player of each class format, Incredible Warrior Tricks is one of the most engaging vanilla videos of all time", video: "HUPexEfCG7g" }, { name: "Pat", lore: "This video is what happens when you give warrriors an extra talent point, an army of healers, and a row a buffs that would make the most battle-hardened Naxxramas raider blush", video: "RGBnjELkgok" }, { name: "Maydie", lore: "You already know who this is, you've seen this, your brother has seen this, your neighbor's wife has seen this. It's Maydie bro. Lock in. You're disappointing me.", video: "SwSR1SHYZRI" }, { name: "Illusion", lore: "Hulksmash with worse music and a worse overall video, but he has two f***ing servo arms so that evens it out a bit.", video: "STq43Pxqgc4" }, { name: "Spinister", lore: "The less famous twin brother of Laintime but not any less fun", video: "hW8ButI6mns" }, { name: "Hulksmash", lore: "Big damage, Big soundtrack, Big fury, your favorite warriors favorite PvP video.", video: "IAR1CsAXLCw" }, { name: "Xahlior", lore: "The most fun thing about this video is his gear, because damn, how is this man so geared?", video: "oKQNJL5IL2s" }],
       note: ""
     },
     paladin: {
-      skill: [{ name: "Chipman", lore: "The Maydie of ret paladin videos", video: "b2EfsrD_Mqk" }, { name: "Kirill", lore: "Where Arthus changes playstyle/spec to suit his situation, Kirill managed to brute forced his grenade stunlock style onto all situations", video: "fhnEhZVzo3I" }],
+      skill: [{ name: "Chipman", lore: "The Maydie of ret paladin videos", video: "b2EfsrD_Mqk" }, { name: "Kirill", lore: " It was pretty neck and neck for who should have been picked between Kirill and Arthus, where Arthus changes playstyle/spec to suit his situation, Kirill managed to brute forced his grenade stunlock style onto all situations", video: "fhnEhZVzo3I" }],
       fun: []
     },
     hunter: {
       skill: [{ name: "Biuret", lore: "After watching every hunter video that exists on the internet that could find we were left with three candidates, the clicker won between them.", video: "m-IzBxFa8yg" }, { name: "Kishra", lore: "After watching every hunter video that exists on the internet that could find we were left with three candidates, the clicker won between them.", video: "eIW0i5tch1E" }],
-      fun: [{ name: "Fubarius(Huntology)", lore: "This video is something that just needs to be experienced. Some (most) will hate it and others will love it, for us however, we definitely believe in immersing ourselves in the dream of the hunt.", video: "k5DdYPLoItU" }],
+      fun: [{ name: "Fubarius(Huntology)", lore: "Can't really put this one into words, it's something that just needs to be experienced. Some (most) will hate it and others will love it, for us however, we definitely believe in immersing ourselves in the dream of the hunt.", video: "k5DdYPLoItU" }],
       note: ""
     },
     rogue: {
@@ -735,7 +735,12 @@
       const entry = nameBtn.closest(".honorable-entry");
       const alreadyOpen = entry.classList.contains("expanded");
 
-      list.querySelectorAll(".honorable-entry.expanded").forEach((el) => el.classList.remove("expanded"));
+      // Clear the expanded state in BOTH lists, not just this one --
+      // only one entry (fun or skill) is ever open at a time, and the
+      // shared video/lore slots need to forget whichever entry last
+      // claimed them regardless of which list it lived in.
+      honorableListFun.querySelectorAll(".honorable-entry.expanded").forEach((el) => el.classList.remove("expanded"));
+      honorableListSkill.querySelectorAll(".honorable-entry.expanded").forEach((el) => el.classList.remove("expanded"));
 
       if (alreadyOpen) {
         hideVideoOverlay();
