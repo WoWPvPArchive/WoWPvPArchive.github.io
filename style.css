@@ -1283,3 +1283,19 @@ body[data-class="warlock"] .lore-name {
 body[data-class="druid"] .lore-name {
   color: #FF7C0A;
 }
+.cursor-follower {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 500px;        /* Set the width of your apple image */
+      height: auto;       /* Set the height of your apple image */
+      pointer-events: none; /* Prevents the image from blocking button clicks */
+      display: none;      /* Kept hidden until hovered */
+      z-index: 9999;      /* Keeps the apple on top of everything else */
+    }
+
+.cursor-follower img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }

@@ -41,7 +41,7 @@
       fun:   { name: "S&Q Inc Group PVP", text: "", model: "models/warrior-fun.glb", lore: "One of the classiest PvP videos in all of vanilla, the editing, the soundtrack and the 2vX lens they filmed through, S&Q Inc is nothing if not fun. A shoutout to Wheeliecool & Champ for a similar vibe but for us it's gotta be S&Q Inc.", video: "sHJS1bqu6yw", animation: "Stand" }
     },
     paladin: {
-      skill: { name: "Arthus", text: "", model: "models/paladin-skill.glb", lore: " Is friends with bobo 6/10", video: "S9XitQA-dkE", animation: "Stand" },
+      skill: { name: "Arthus", text: "", model: "models/paladin-skill.glb", lore: "The king of the muck, you won't see him back down from a fight around a few mobs. Has some of the best understanding of 1v1s we've seen from vanilla paladins, even if he's not the best movement wise. After seeing his furbolg tech in Bobo's video we knew we had our guy.  6.5/10", video: "S9XitQA-dkE", animation: "Stand" },
       fun:   { name: "Zalgradis", text: "", model: "models/paladin-fun.glb", lore: "Sketches, engineering, bad voice acting, and a unique playstyle come together in a love letter full of references to other videos of the era", video: "NOXrGmulbMk", animation: "Stand" }
     },
     hunter: {
@@ -95,7 +95,7 @@
       note: ""
     },
     paladin: {
-      skill: [{ name: "Chipman", lore: "The Maydie of ret paladin videos", video: "b2EfsrD_Mqk" }, { name: "Kirill", lore: "Stunlocks with engi", video: "fhnEhZVzo3I" }],
+      skill: [{ name: "Chipman", lore: "The Maydie of ret paladin videos", video: "b2EfsrD_Mqk" }, { name: "Kirill", lore: " It was pretty neck and neck for who should have been picked between Kirill and Arthus, where Arthus changes playstyle/spec to suit his situation, Kirill managed to brute forced his grenade stunlock style onto all situations", video: "fhnEhZVzo3I" }],
       fun: []
     },
     hunter: {
@@ -599,7 +599,7 @@
     if (!container) return;
 
     if (!entries || entries.length === 0) {
-      container.innerHTML = '<p class="honorable-placeholder">No entries yet.</p>';
+      container.innerHTML = '<p class="honorable-placeholder"></p>';
       return;
     }
 
@@ -796,3 +796,40 @@
   updateView();
   loadYouTubeApi();
 })();
+
+window.addEventListener('wheel', (event) => {
+  // Check if the user scrolled down
+  if (event.deltaY > 0) {
+    document.getElementById('honorableBtn').click();
+  } else if (event.deltaY < 0)
+    document.getElementById('honorableBackBtn').click();
+    
+}, { passive: false }); // { passive: false } is REQUIRED to allow event.preventDefault()
+
+const button = document.querySelector('.honorable-class-btn');
+const apple = document.getElementById('apple-follower');
+
+let delayTimer; // Variable to store the timeout ID
+
+button.addEventListener('mouseenter', () => {
+  // Clear any existing timer just in case
+  clearTimeout(delayTimer);
+  
+  // Set a delay of 500 milliseconds (0.5 seconds) before showing
+  delayTimer = setTimeout(() => {
+    apple.style.display = 'block';
+  }, 6700); 
+});
+
+button.addEventListener('mousemove', (e) => {
+  // Keep updating the position while moving
+  apple.style.transform = `translate(${e.clientX - 0}px, ${e.clientY - 390}px)`;
+});
+
+button.addEventListener('mouseleave', () => {
+  // Cancel the timer if the user leaves before the delay finishes
+  clearTimeout(delayTimer);
+  
+  // Hide the apple
+  apple.style.display = 'none';
+});
