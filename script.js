@@ -54,7 +54,7 @@
     },
     priest: {
       skill: { name: "There are no good priests apparently", text: "", model: "models/priest-skill.glb", lore: "There are no good priests apparently", video: "IUQyClRWOFc", animation: "Stand" },
-      fun:   { name: "Beckon", text: "", model: "models/priest-fun.glb", lore: "is the Hulksmash of holy priests, sit back, relax, and watch this man cast a 40 second holy fire to take someones head off", video: "x_EgBtUtWBM", animation: "Stand (ID 0 variation 0)" }
+      fun:   { name: "Beckon", text: "", model: "models/priest-fun.glb", lore: "The Hulksmash of holy priests, sit back, relax, and watch this man cast a 40 second holy fire to take someones head off", video: "x_EgBtUtWBM", animation: "Stand (ID 0 variation 0)" }
     },
     shaman: {
       skill: { name: "Nimhabulove", text: "", model: "models/shaman-skill.glb", lore: "Between totems, shocks, healing and damaging spells shaman has a lot of tools at its disposal, our guy said nah, not enough, and added some engi to this toolkit. Grounding coils, reflecting fears and stunlocking with tidal/nades, there are definite moments in his video that earn him a spot on this page. 6/10", video: "qxMSzBxxesk", animation: "Stand" },
