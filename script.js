@@ -41,11 +41,11 @@
       fun:   { name: "S&Q Inc Group PVP", text: "", model: "models/warrior-fun.glb", lore: "One of the classiest PvP videos in all of vanilla, the editing, the soundtrack and the 2vX lens they filmed through, S&Q Inc is nothing if not fun. A shoutout to Wheeliecool & Champ for a similar vibe but for us it's gotta be S&Q Inc.", video: "sHJS1bqu6yw", animation: "Stand" }
     },
     paladin: {
-      skill: { name: "Arthus", text: "", model: "models/paladin-skill.glb", lore: "The king of the muck, you won't see him back down from a fight around a few mobs. Has some of the best understanding of 1v1s we've seen from vanilla paladins, even if he's not the best movement wise. After seeing his furbolg tech in Bobo's video we knew we had our guy.  6.5/10", video: "S9XitQA-dkE", animation: "Stand" },
+      skill: { name: "Arthus", text: "", model: "models/paladin-skill.glb", lore: "The king of the muck, you won't see him back down from a fight around a few mobs. Has some of the best understanding of 1v1s we've seen from vanilla paladins, even if he's not the best movement wise. After seeing his furbolg tech in Bobo's video we knew we had our guy.  7/10", video: "S9XitQA-dkE", animation: "Stand" },
       fun:   { name: "Zalgradis", text: "", model: "models/paladin-fun.glb", lore: "Sketches, engineering, bad voice acting, and a unique playstyle come together in a love letter full of references to other videos of the era", video: "NOXrGmulbMk", animation: "Stand" }
     },
     hunter: {
-      skill: { name: "Junglle", text: "", model: "models/hunter-skill.glb", lore: "Some decent kiting here, especially given that he's clicking the majority of his spells. In comparison to every hunter PvP video (sorry Dysphoria) we've come across might as well be a god. 5/10", video: "QrXL4bxtymk", animation: "Stand" },
+      skill: { name: "Junglle", text: "", model: "models/hunter-skill.glb", lore: "Some decent kiting here, especially given that he's clicking the majority of his spells. In comparison to every hunter PvP video (sorry Dysphoria) we've come across might as well be a god. 6/10", video: "QrXL4bxtymk", animation: "Stand" },
       fun:   { name: "Dysphoria", text: "", model: "models/hunter-fun.glb", lore: " A completely fresh soundtrack for the time and a mental that says nothing is impossible Hunter Vs. World is an all time classic series.", video: "7XgF_P9Ddjk", animation: "Stand" }
     },
     rogue: {
@@ -57,7 +57,7 @@
       fun:   { name: "Beckon", text: "", model: "models/priest-fun.glb", lore: "The Hulksmash of holy priests, sit back, relax, and watch this man cast a 40 second holy fire to take someones head off", video: "x_EgBtUtWBM", animation: "Stand (ID 0 variation 0)" }
     },
     shaman: {
-      skill: { name: "Nimhabulove", text: "", model: "models/shaman-skill.glb", lore: "Between totems, shocks, healing and damaging spells shaman has a lot of tools at its disposal, our guy said nah, not enough, and added some engi to this toolkit. Grounding coils, reflecting fears and stunlocking with tidal/nades, there are definite moments in his video that earn him a spot on this page. 6/10", video: "qxMSzBxxesk", animation: "Stand" },
+      skill: { name: "Nimhabulove", text: "", model: "models/shaman-skill.glb", lore: "Between totems, shocks, healing and damaging spells shaman has a lot of tools at its disposal, our guy said nah, not enough, and added some engi to this toolkit. Grounding coils, reflecting fears and stunlocking with tidal/nades, there are definite moments in his video that earn him a spot on this page. 7/10", video: "qxMSzBxxesk", animation: "Stand" },
       fun: {
         variants: [
           { name: "Cabbarnuke", text: "", model: "models/shaman-fun-cabbarnuke.glb", lore: "If you saw Roguecraft and needed more naked PvP, Cabbarnuke is your guy.", video: "eXE-J13gpNE", animation: "Stand" },
@@ -66,7 +66,7 @@
       }
     },
     mage: {
-      skill: { name: "Clazzi", text: "", model: "models/mage-skill.glb", lore: "Crispy movement, cooldown management and a complete confidence in his actions. Perhaps the first known recording of a dirty pop, the opening 1vX is one of the best recorded vanilla fights of all time. 9.5/10", video: "3_Tr5aklJ6U", animation: "Stand (ID 0 variation 0)" },
+      skill: { name: "Clazzi", text: "", model: "models/mage-skill.glb", lore: "Crispy movement, cooldown management and a complete confidence in his actions. Perhaps the first known recording of a dirty pop, the opening 1vX is one of the best recorded vanilla fights of all time. 9.9/10", video: "3_Tr5aklJ6U", animation: "Stand (ID 0 variation 0)" },
       fun:   { name: "Pathologist", text: "", model: "models/mage-fun.glb", lore: "By far the most unique and creative visual style, Pathologist (Dyf1.6) saw the potential for PvP videos to be more than crit showcases and unedited BG footage, he wanted to make art, not just in video form as half of his soundtracks are his own songs. Had God blessed him with the PvP skill of a Clazzi, he'd be the only name on this list. ", video: "0ZNAWoYEras", animation: "Stand (ID 0 variation 0)", cameraRadius: "75%"  }
     },
     warlock: {
@@ -74,7 +74,10 @@
       fun:   { name: "Drakedog", text: "", model: "models/warlock-fun.glb", lore: "Did we mention we're fans of Pathologist? Drakedog, who is probably the most beloved vanilla warlock, having Pathologist edit his video for him was a crossover that came out of nowhere and we're glad it did.", video: "I918N8wUvRs", animation: "Stand (ID 0 variation 0)", cameraRadius: "40%" }
     },
     druid: {
-      skill: { name: "Tfo", text: "", model: "models/druid-skill.glb", lore: "Very solid player, he has an exceptional grasp on how to use the utility and strengths of this versatile class. 7.5/10", video: "aX93zH6wJeM", animation: "Stand" },
+      skill: {  variants: [
+          { name: "Tfo", text: "", model: "models/druid-skill.glb", lore: "Tfo is a player who fully invested into tech, using the incredible tools afforded to this versatile class at the highest level we've seen. 7.5/10", video: "aX93zH6wJeM", animation: "Stand" },
+          { name: "Spoh", text: "", model: "models/druid-skill-spoh1.glb", lore: "Spoh instead decided to master his movement, in a time where people were still learning how to walk, Spoh was dancing around them on skates. 7.5/10", video: "FThprhi8juU", animation: "Stand" }
+        ]},
       fun:   { name: "N E V E R ", text: "", model: "models/druid-fun.glb", lore: "You thought druids were weak in vanilla? Ferahgo and Boro came together to show you otherwise.", video: "J7DN_w0LQUI", animation: "Stand" }
     }
   };
@@ -118,7 +121,7 @@
       fun: [{ name: "Arashmano", lore: "If Unbreakable is Shaq, Arashmano is Yao, same build different style", video: "8-w9Wl8v6ZA" }]
     },
     mage: {
-      skill: [{ name: "Drifting", lore: "Both Drifting and Zachary are incredibly clean and could have made the top spot if it was not for the fact that Clazzi is Clazzi", video: "VXh_kZZ-GQo" }, { name: "Zachary", lore: "Both Zachary and Drifting are incredibly clean and could have made the top spot if it was not for the fact that Clazzi is Clazzi.", video: "ohTYLIi1ghY" }, { name: "Gameking", lore: "Very fast in both decision making and execution, crispy ice blocks.", video: "RfY8Egsd6C8" }, { name: "Alca", lore: "Great movement, a lot of heads up small plays, and he's ele so that's fun.", video: "MMnmuU8mOsw" }, { name: "Vurtne", lore: "When you think warlock, you think Drakedog. When you think mage, it's Vurtne", video: "k5Wieh9MMmc" }],
+      skill: [{ name: "Drifting", lore: "Both Drifting and Zachary are incredibly clean and could have made the top spot if it was not for the fact that Clazzi is Clazzi", video: "VXh_kZZ-GQo" }, { name: "Zachary", lore: "Both Zachary and Drifting are incredibly clean and could have made the top spot if it was not for the fact that Clazzi is Clazzi.", video: "ohTYLIi1ghY" }, { name: "Gameking", lore: "Very fast in both decision making and execution, crispy ice blocks.", video: "YsPmqwy29Gs" }, { name: "Alca", lore: "Great movement, a lot of heads up small plays, and he's ele so that's fun.", video: "MMnmuU8mOsw" }, { name: "Vurtne", lore: "When you think warlock, you think Drakedog. When you think mage, it's Vurtne", video: "k5Wieh9MMmc" }],
       fun: [{ name: "Zelta", lore: "Fire. Fun. Ignite. Invis pyro. Fun. Crit. Boom. Ignite.", video: "WYSbkW__6MI" }, { name: "Faxmonkey", lore: "Made you envious of mages PvE ability, Dysphoria and him were cut from the same cloth", video: "3O_pNDc73MM" }, { name: "Voidim", lore: "The worlds first vanilla video that doesn't include Rammstein or P.O.D, this soundtrack is F R E S H", video: "fSn46eGGW7s" }, { name: "Otherguy", lore: "Everyone who played in vanilla knew his name, very well respected player from way back when.", video: "2FwMRW1ra0E" }],
       note: "Both Zachary and Drifiting get extra special mentions as standouts, Clazzi is just a cut above everyone else"
     },
