@@ -76,7 +76,7 @@
     druid: {
       skill: {  variants: [
           { name: "Tfo", text: "", model: "models/druid-skill.glb", lore: "Tfo is a player who fully invested into tech, using the incredible tools afforded to this versatile class at the highest level we've seen. 7.5/10", video: "aX93zH6wJeM", animation: "Stand" },
-          { name: "Spoh", text: "", model: "models/druid-skill-spoh1.glb", lore: "Spoh instead decided to master his movement, in a time where people were still learning how to walk, Spoh was dancing around them on skates. 7.5/10", video: "FThprhi8juU", animation: "Stand" }
+          { name: "Spoh", text: "", model: "models/druid-Skill-spoh1.glb", lore: "Spoh instead decided to master his movement, in a time where people were still learning how to walk, Spoh was dancing around them on skates. 7.5/10", video: "FThprhi8juU", animation: "Stand" }
         ]},
       fun:   { name: "N E V E R ", text: "", model: "models/druid-fun.glb", lore: "You thought druids were weak in vanilla? Ferahgo and Boro came together to show you otherwise.", video: "J7DN_w0LQUI", animation: "Stand" }
     }
