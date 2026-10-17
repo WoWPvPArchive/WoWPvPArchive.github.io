@@ -98,7 +98,7 @@
       note: ""
     },
     paladin: {
-      skill: [{ name: "Chipman", lore: "The Maydie of ret paladin videos", video: "b2EfsrD_Mqk" }, { name: "Kirill", lore: "Where Arthus changes playstyle/spec to suit his situation, Kirill managed to brute forced his grenade stunlock style onto all situations", video: "fhnEhZVzo3I" }, { name: "영구와레오형(09)", lore: "a video that flew somewhat under the radar, there are some nice plays here including last second bubbles and knocking rogues out of stealth", video: "rHq2NGnyJN0" }],
+      skill: [{ name: "Chipman", lore: "The Maydie of ret paladin videos", video: "b2EfsrD_Mqk" }, { name: "Kirill", lore: "Where Arthus changes playstyle/spec to suit his situation, Kirill managed to brute forced his grenade stunlock style onto all situations", video: "fhnEhZVzo3I" }, { name: "영구와레오형 (09)", lore: "A video that flew somewhat under the radar, there are some nice plays here including last second bubbles and knocking rogues out of stealth", video: "rHq2NGnyJN0" }],
       fun: []
     },
     hunter: {
